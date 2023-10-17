@@ -1,34 +1,66 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import sendChatLog from "./api/sendChatLog";
-import updateChatLogs from "./api/chatLogs";
-import getChatLogs from "./api/getChatLogs";
+import { useEffect, useRef, useState } from "react";
+import supabase from "../utils/supabase";
 
 export default function Page() {
   const textbox = useRef();
-  const chat = useRef();
+  const [chatLogs, setChatLogs] = useState(null);
+  const [updated, setUpdated] = useState();
+
   const handleSubmit = (value) => {
-    console.log(value);
     sendChatLog(value);
     textbox.current.value = "";
   }
 
-  useEffect(() => {
-    updateChatLogs();
-  }, []);
+  const getChatLogs = async () => {
+    let { data, error } = await supabase
+      .from('chatlogs')
+      .select()
+    return data;
+  }
 
-  const chatLogs = getChatLogs();
-  console.log(chatLogs);
+  const sendChatLog = async (log) => {
+    const { data, error } = await supabase
+      .from('chatlogs')
+      .insert([
+        { text: log },
+      ])
+      .select()
+  }
+
+  const channel = supabase
+    .channel('chat log changes')
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'chatlogs',
+      },
+      (() => {
+        setUpdated(true);
+      }))
+    .subscribe()
+
+    useEffect(() => {
+      setUpdated(false);
+    }, [updated])
+
+  const fetchChat = async () => {
+    const chatlog = await getChatLogs();
+    setChatLogs(chatlog);
+  }
+
+  useEffect(() => {
+    fetchChat()
+  }, [updated])
+
 
   return (
     <>
-      <div ref={chat}>
-        {/* {
-          chatLogs?.map((log) => {
-            <p key={log.id}>{log.text}</p>
-          })
-        } */}
+      <div>
+        {chatLogs ? chatLogs.map((log) => <p key={log.id}>{log.text}</p>) : ""}
       </div>
       <input type="text" placeholder="Type something here..." ref={textbox} name="textbox" />
       <button type="submit" onClick={() => handleSubmit(textbox.current.value)}>Send</button>
