@@ -1,3 +1,5 @@
+import "../styles/global.module.css"
+
 export const metadata = {
   title: 'chatty',
   description: 'a chat app',
