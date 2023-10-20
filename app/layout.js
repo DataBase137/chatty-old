@@ -1,4 +1,4 @@
-import "../styles/global.module.css"
+import "../styles/global.css"
 
 export const metadata = {
   title: 'chatty',

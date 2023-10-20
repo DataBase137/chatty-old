@@ -2,14 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import supabase from "../utils/supabase";
+import styles from "../styles/chat.module.css"
 
-export default function Page() {
+const Page = () => {
   const textbox = useRef();
   const [chatLogs, setChatLogs] = useState(null);
-  const [updated, setUpdated] = useState();
 
-  const handleSubmit = (value) => {
-    sendChatLog(value);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    sendChatLog(textbox.current.value);
     textbox.current.value = "";
   }
 
@@ -38,14 +39,14 @@ export default function Page() {
         schema: 'public',
         table: 'chatlogs',
       },
-      (() => {
-        setUpdated(true);
+      ((payload) => {
+        if (payload.eventType === "INSERT") {
+          setChatLogs((current) => [...current, payload.new]);
+        } else if (payload.eventType === "DELETE") {
+          setChatLogs((current) => [current.find((element) => element.id !== payload.old.id)]);
+        }
       }))
     .subscribe()
-
-    useEffect(() => {
-      setUpdated(false);
-    }, [updated])
 
   const fetchChat = async () => {
     const chatlog = await getChatLogs();
@@ -53,17 +54,24 @@ export default function Page() {
   }
 
   useEffect(() => {
-    fetchChat()
-  }, [updated])
-
+    fetchChat();
+  }, []);
 
   return (
-    <>
-      <div>
-        {chatLogs ? chatLogs.map((log) => <p key={log.id}>{log.text}</p>) : ""}
+    <div className={styles.chatContainer}>
+      <div className={styles.chatLog}>
+        {chatLogs ? chatLogs.map((log) => {
+          if (log) return <p key={log.id}>{log.text}</p>
+        }) : ""}
       </div>
-      <input type="text" placeholder="Type something here..." ref={textbox} name="textbox" />
-      <button type="submit" onClick={() => handleSubmit(textbox.current.value)}>Send</button>
-    </>
+      <div className={styles.typeArea}>
+        <form onSubmit={(event) => handleSubmit(event)}>
+          <input type="text" placeholder="Type something here..." ref={textbox} name="textbox" className={styles.chatbox} />
+          <button type="submit" className={styles.sendBtn}>Send</button>
+        </form>
+      </div>
+    </div>
   )
 }
+
+export default Page;
