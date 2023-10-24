@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import supabase from "../utils/supabase";
 import styles from "../styles/chat.module.css"
+import { FaArrowUp } from "react-icons/fa"
 
 const Page = () => {
   const textbox = useRef();
@@ -10,8 +11,10 @@ const Page = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    sendChatLog(textbox.current.value);
-    textbox.current.value = "";
+    if (textbox.current.value) {
+      sendChatLog(textbox.current.value);
+      textbox.current.value = "";
+    }
   }
 
   const getChatLogs = async () => {
@@ -59,15 +62,23 @@ const Page = () => {
 
   return (
     <div className={styles.chatContainer}>
-      <div className={styles.chatLog}>
+      <div className={styles.chatLogContainer}>
         {chatLogs ? chatLogs.map((log) => {
-          if (log) return <p key={log.id}>{log.text}</p>
+          if (log) {
+            const date = new Date(log.created_at)
+            return (
+              <div className={styles.chatLog}>
+                <p className={styles.chatLogText} key={log.id}>{log.text}</p>
+                <p className={styles.chatLogTime}>{date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
+              </div>
+            )
+          }
         }) : ""}
       </div>
       <div className={styles.typeArea}>
         <form onSubmit={(event) => handleSubmit(event)}>
-          <input type="text" placeholder="Type something here..." ref={textbox} name="textbox" className={styles.chatbox} />
-          <button type="submit" className={styles.sendBtn}>Send</button>
+          <input type="text" placeholder="Type a message" ref={textbox} name="textbox" className={styles.chatbox} />
+          <button type="submit" className={styles.sendBtn}><FaArrowUp /></button>
         </form>
       </div>
     </div>
