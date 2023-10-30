@@ -7,6 +7,8 @@ import { FaArrowUp } from "react-icons/fa"
 
 const Page = () => {
   const textbox = useRef();
+  const logContainer = useRef();
+  const scroll = useRef();
   const [chatLogs, setChatLogs] = useState(null);
 
   const handleSubmit = (event) => {
@@ -60,20 +62,23 @@ const Page = () => {
     fetchChat();
   }, []);
 
+  useEffect(() => {
+    scroll.current.scrollIntoView(true);
+  }, [chatLogs]);
+
   return (
     <div className={styles.chatContainer}>
-      <div className={styles.chatLogContainer}>
-        {chatLogs ? chatLogs.map((log) => {
-          if (log) {
-            const date = new Date(log.created_at)
-            return (
-              <div className={styles.chatLog}>
-                <p className={styles.chatLogText} key={log.id}>{log.text}</p>
-                <p className={styles.chatLogTime}>{date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
-              </div>
-            )
-          }
+      <div className={styles.chatLogContainer} ref={logContainer}>
+        {chatLogs ? chatLogs.map((log, index) => {
+          const date = new Date(log.created_at);
+          return (
+            <div className={styles.chatLog}>
+              <p className={styles.chatLogText} key={index}>{log.text}</p>
+              <p className={styles.chatLogTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
+            </div>
+          )
         }) : ""}
+        <div ref={scroll} className={styles.scroll}></div>
       </div>
       <div className={styles.typeArea}>
         <form onSubmit={(event) => handleSubmit(event)}>

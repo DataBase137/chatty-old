@@ -8,6 +8,7 @@
 
 .chatLogContainer {
     padding: 0 22%;
+    overflow: auto;
 }
 
 .chatLog {
@@ -19,6 +20,7 @@
 
 .chatLogText {
     font-size: 12pt;
+    max-width: 80%;
 }
 
 .chatLogTime {
