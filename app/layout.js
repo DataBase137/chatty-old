@@ -1,14 +1,20 @@
-import "../styles/global.css"
+import { Roboto } from 'next/font/google'
+import "./globals.css"
+
+const roboto = Roboto({
+  weight: '400',
+  subsets: ['latin'],
+})
 
 export const metadata = {
-  title: 'chatty',
+  title: 'Chatty',
   description: 'a chat app',
 }
 
 export default function RootLayout({ children }) {
- return (
+  return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={roboto.className}>{children}</body>
     </html>
   )
 }
