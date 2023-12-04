@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import supabase from "../utils/supabase";
 import styles from "./page.module.css"
 import { FaArrowUp } from "react-icons/fa"
 
@@ -13,53 +12,10 @@ const Page = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (textbox.current.value) {
-      sendChatLog(textbox.current.value);
+      // sendChatLog(textbox.current.value);
       textbox.current.value = "";
     }
   }
-
-  const getChatLogs = async () => {
-    let { data, error } = await supabase
-      .from('chatlogs')
-      .select()
-    return data;
-  }
-
-  const sendChatLog = async (log) => {
-    const { data, error } = await supabase
-      .from('chatlogs')
-      .insert([
-        { text: log },
-      ])
-      .select()
-  }
-
-  const channel = supabase
-    .channel('chat log changes')
-    .on(
-      'postgres_changes',
-      {
-        event: '*',
-        schema: 'public',
-        table: 'chatlogs',
-      },
-      ((payload) => {
-        if (payload.eventType === "INSERT") {
-          setChatLogs((current) => [...current, payload.new]);
-        } else if (payload.eventType === "DELETE") {
-          setChatLogs((current) => [current.find((element) => element.id !== payload.old.id)]);
-        }
-      }))
-    .subscribe()
-
-  const fetchChat = async () => {
-    const chatlog = await getChatLogs();
-    setChatLogs(chatlog);
-  }
-
-  useEffect(() => {
-    fetchChat();
-  }, []);
 
   useEffect(() => {
     scroll.current.scrollIntoView(true);

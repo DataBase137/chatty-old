@@ -7,7 +7,7 @@
 - Separate chats with people
 - Group chats
 - Color scheme, sidebar, dark mode?
-- Switch over to websocket and other db??
+- Switch over to websocket
 
 # Things to redo/update
 - Padding and styling on scroll bar

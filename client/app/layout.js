@@ -7,7 +7,7 @@ const roboto = Roboto({
 })
 
 export const metadata = {
-  title: 'Chatty',
+  title: 'chatty',
   description: 'a chat app',
 }
 
