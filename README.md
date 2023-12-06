@@ -8,13 +8,13 @@
 - Group chats
 - Color scheme, sidebar, dark mode?
 - Switch over to websocket
+- Scroll to bottom
 
 # Things to redo/update
 - Padding and styling on scroll bar
-- Scroll to bottom needs to be made more efficient
 
 # Known bugs/Things to Fix:
 - Text not wrapping
 - When last chat log deleted, error occurs
 - Sometimes chat logs will rearrange order
-- "No key" error
+- Lagged chat log update
