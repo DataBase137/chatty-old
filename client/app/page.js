@@ -12,9 +12,24 @@ const Page = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (textbox.current.value) {
-      // sendChatLog(textbox.current.value);
+      sendChatLog(textbox.current.value);
       textbox.current.value = "";
     }
+  }
+
+  const sendChatLog = async (text) => {
+    const result = await fetch('http://localhost:3001/sendlog', {
+      method: 'POST',
+      body: JSON.stringify({ text }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    const response = await result.json();
+
+    if (response.success) console.log("Sent!")
+    else console.log(response.error)
   }
 
   useEffect(() => {

@@ -73,18 +73,18 @@ jspm_packages/
 .yarn-integrity
 
 # dotenv environment variable files
-*/.env
-*/.env.development.local
-*/.env.test.local
-*/.env.production.local
-*/.env.local
+server/.env
+.env.development.local
+.env.test.local
+.env.production.local
+client/.env.local
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache
 
 # Next.js build output
-.next
+client/.next
 out
 
 # Nuxt.js build / generate output
