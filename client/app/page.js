@@ -3,51 +3,34 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./page.module.css"
 import { FaArrowUp } from "react-icons/fa"
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:7000");
 
 const Page = () => {
   const textbox = useRef();
   const scroll = useRef();
   const [chatLogs, setChatLogs] = useState(null);
 
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log(socket.id);
+    });
+
+    socket.emit("get-logs");
+
+    socket.on("disconnect", () => console.log("bye bye!"));
+
+    socket.on("got-logs", (logs) => setChatLogs(logs));
+  }, []);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     if (textbox.current.value) {
-      sendChatLog(textbox.current.value);
+      socket.emit("message-sent", textbox.current.value);
       textbox.current.value = "";
     }
-    getChatLogs();
   }
-
-  const sendChatLog = async (text) => {
-    const result = await fetch('http://localhost:8000/sendlog', {
-      method: 'POST',
-      body: JSON.stringify({ text }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-
-    const response = await result.json();
-
-    if (response.error) console.error(response.error);
-  };
-
-  const getChatLogs = async () => {
-    const result = await fetch('http://localhost:8000/getlogs', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-
-    const response = await result.json();
-
-    if (response.success) setChatLogs(response.chatlogs); else console.error(response.error);
-  }
-
-  useEffect(() => {
-    getChatLogs();
-  }, []);
 
   return (
     <>

@@ -1,12 +1,25 @@
-const express = require("express");
-const app = express();
-const cors = require("cors");
-const { sendLogRoute, getLogsRoute } = require('./chat.controller');
+const { sendLog, getLogs } = require('./chat.controller');
+const { Server } = require("socket.io");
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
-app.use(cors({ origin: "http://localhost:3000" }));
-app.use(express.json({ limit: "2.5mb" }));
+const io = new Server(7000, {
+    cors: {
+        origin: "http://localhost:3000"
+    }
+});
 
-app.post('/sendlog', sendLogRoute);
-app.post('/getlogs', getLogsRoute);
+io.on("connection", (socket) => {
+    console.log(socket.id);
 
-app.listen(8000, () => console.log("Server started on port 8000"));
+    socket.on("message-sent", (text) => {
+        sendLog(text);
+        console.log("message sent!", text);
+    });
+
+    socket.on("get-logs", async () => {
+        const logs = await getLogs();
+        console.log(logs);
+        socket.emit("got-logs", logs)
+    })
+});

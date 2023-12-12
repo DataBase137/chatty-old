@@ -7,14 +7,13 @@
 - Separate chats with people
 - Group chats
 - Color scheme, sidebar, dark mode?
-- Switch over to websocket
 - Scroll to bottom
+- Realtime updating
 
 # Things to redo/update
 - Padding and styling on scroll bar
 
 # Known bugs/Things to Fix:
 - Text not wrapping
-- When last chat log deleted, error occurs
 - Sometimes chat logs will rearrange order
-- Lagged chat log update
+- Socket sending multiple requests even in a useEffect
