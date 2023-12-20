@@ -10,24 +10,26 @@ const socket = io("http://localhost:7000");
 const Page = () => {
   const textbox = useRef();
   const scroll = useRef();
-  const [chatLogs, setChatLogs] = useState(null);
+  const [chatLogs, setChatLogs] = useState([]);
+
+  let counter = 0;
 
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log(socket.id);
+    // socket.on("got-logs", (logs) => setChatLogs(logs));
+    socket.on("message-recieved", (log) => {
+      // setChatLogs([...chatLogs, log]);
+      setChatLogs((current) => [...current, log]);
     });
-
-    socket.emit("get-logs");
-
-    socket.on("disconnect", () => console.log("bye bye!"));
-
-    socket.on("got-logs", (logs) => setChatLogs(logs));
-  }, []);
+  }, [socket]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (textbox.current.value) {
       socket.emit("message-sent", textbox.current.value);
+      setChatLogs([...chatLogs, textbox.current.value]);
+      // socket.once("message-was-sent", (log) => {
+      // setChatLogs([...chatLogs, log])
+      // });
       textbox.current.value = "";
     }
   }
@@ -36,11 +38,12 @@ const Page = () => {
     <>
       <div className={styles.chatLogContainer}>
         {chatLogs ? chatLogs.map((log) => {
-          const date = new Date(log.created_at);
+          // const date = new Date(log.created_at);
+          counter++;
           return (
-            <div className={styles.chatLog} key={log.id}>
-              <p className={styles.chatLogText}>{log.text}</p>
-              <p className={styles.chatLogTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
+            <div className={styles.chatLog} key={counter}>
+              <p className={styles.chatLogText}>{log}</p>
+              {/* <p className={styles.chatLogTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p> */}
             </div>
           )
         }) : ""}
