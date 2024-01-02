@@ -1,6 +1,6 @@
 .chatLogContainer {
     margin: 0 22%;
-    height: 94vh;
+    height: 93vh;
     position: relative;
     overflow-y: auto;
     overflow-x: hidden;
@@ -14,6 +14,10 @@
 
 .chatLogTime {
     font-size: 8pt;
+}
+
+.chatLogText {
+    max-width: 620px;
 }
 
 .typeArea {

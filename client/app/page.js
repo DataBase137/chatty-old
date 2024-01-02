@@ -12,42 +12,39 @@ const Page = () => {
   const scroll = useRef();
   const [chatLogs, setChatLogs] = useState([]);
 
-  let counter = 0;
-
-  useEffect(() => {
-    // socket.on("got-logs", (logs) => setChatLogs(logs));
-    socket.on("message-recieved", (log) => {
-      // setChatLogs([...chatLogs, log]);
-      setChatLogs((current) => [...current, log]);
-    });
-  }, [socket]);
-
   const handleSubmit = (event) => {
     event.preventDefault();
     if (textbox.current.value) {
       socket.emit("message-sent", textbox.current.value);
-      setChatLogs([...chatLogs, textbox.current.value]);
-      // socket.once("message-was-sent", (log) => {
-      // setChatLogs([...chatLogs, log])
-      // });
       textbox.current.value = "";
     }
   }
+
+  socket.on("got-logs", (logs) => setChatLogs(logs));
+
+  useEffect(() => {
+    socket.off("message-recieved").on("message-recieved", (log) => {
+      setChatLogs((current) => [...current, log]);
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    scroll.current.scrollIntoView(true);
+  }, [chatLogs]);
 
   return (
     <>
       <div className={styles.chatLogContainer}>
         {chatLogs ? chatLogs.map((log) => {
-          // const date = new Date(log.created_at);
-          counter++;
+          const date = new Date(log.created_at);
           return (
-            <div className={styles.chatLog} key={counter}>
-              <p className={styles.chatLogText}>{log}</p>
-              {/* <p className={styles.chatLogTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p> */}
+            <div className={styles.chatLog} key={log.id}>
+              <p className={styles.chatLogText}>{log.text}</p>
+              <p className={styles.chatLogTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
             </div>
           )
-        }) : ""}
-        <div ref={scroll} className={styles.scroll}></div>
+        }): ""}
+        <div ref={scroll}></div>
       </div>
       <div className={styles.typeArea}>
         <form onSubmit={(event) => handleSubmit(event)}>
