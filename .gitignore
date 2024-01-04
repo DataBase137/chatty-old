@@ -39,7 +39,7 @@ bower_components
 build/Release
 
 # Dependency directories
-*/node_modules/
+node_modules/
 jspm_packages/
 
 # Snowpack dependency directory (https://snowpack.dev/)
@@ -73,18 +73,18 @@ jspm_packages/
 .yarn-integrity
 
 # dotenv environment variable files
-server/.env
+.env
 .env.development.local
 .env.test.local
 .env.production.local
-client/.env.local
+.env.local
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache
 
 # Next.js build output
-client/.next
+.next
 out
 
 # Nuxt.js build / generate output

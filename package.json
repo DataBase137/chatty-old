@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "chatty",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,11 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.39.2",
     "next": "^14.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-icons": "^4.12.0",
-    "socket.io-client": "^4.7.2"
+    "react-icons": "^4.12.0"
   },
   "devDependencies": {
     "eslint": "latest",

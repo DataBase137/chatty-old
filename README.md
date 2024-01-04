@@ -7,7 +7,7 @@
 - Separate chats with people
 - Group chats
 - Color scheme, sidebar, dark mode?
-- Scroll to bottom
+- Loading Screen
 
 # Things to redo/update
 - Padding and styling on scroll bar
