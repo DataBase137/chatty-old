@@ -1,54 +1,107 @@
-.chatLogContainer {
-    margin: 0 22%;
-    height: 93vh;
-    position: relative;
-    overflow-y: auto;
-    overflow-x: hidden;
+@import url('https://fonts.googleapis.com/css2?family=Martel+Sans:wght@200;300;400;600;700;800;900&display=swap');
+
+/* 
+
+#F2CEE6
+#41337A
+#6EA4BF
+#C2EFEB
+#ECFEE8
+
+*/
+
+.homeContainer {
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 50%);
 }
 
-.chatLog {
+.txtType {
+    font-family: "Raleway", sans-serif;
+    font-size: 4rem;
+    font-variant: small-caps;
+    font-weight: 500;
+}
+
+.txtType>span>span {
+    border-right: .5rem solid #000;
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+
+.topLeft {
+    height: 100vh;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.chatLogTime {
-    font-size: 8pt;
-}
-
-.chatLogText {
-    max-width: 620px;
-}
-
-.typeArea {
-    position: fixed;
-    bottom: 2%;
-    display: flex;
-    width: 100%;
     justify-content: center;
-    height: 4vh;
+    align-items: center;
+    flex-direction: column;
 }
 
-.input {
-    height: 26px;
-    width: 60vw;
-    font-size: 12pt;
-    border: 1px black;
-    border-radius: 50px;
-    padding-left: 10px;
+.topRight {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
-.sendBtn {
-    height: 26px;
-    width: 26px;
-    background-color: white;
+.slogan {
+    font-family: "Martel Sans", sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    padding: 13px 0;
+}
+
+.btn {
+    font-family: "Nunito";
+    font-weight: 700;
+    line-height: 130%;
+    font-size: 17px;
+    border-radius: 3px;
+    background-color: #6EA4BF;
     border: none;
-    border-radius: 50%;
-    margin-left: -27px;
-    margin-bottom: 1px;
+    color: #fff;
+    text-align: center;
+    padding: 10px 30px;
+    cursor: pointer;
+    width: 132px;
 }
 
-.sendBtn:hover {
-    background-color: gray;
+.btn:hover {
+    background-color: #55849c;
+}
+
+.downArrowContainer {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+    font-size: 40px;
+    bottom: 10%;
+    animation: bounce 2s ease infinite;
+    z-index: 1000;
+}
+
+.downArrow {
     cursor: pointer;
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(40px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
 }

@@ -1,0 +1,55 @@
+.chat {
+    margin: 0 22%;
+    height: 93vh;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.chatLog {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: "Roboto";
+}
+
+.chatLogTime {
+    font-size: 8pt;
+}
+
+.chatLogText {
+    max-width: 620px;
+}
+
+.typeArea {
+    position: fixed;
+    bottom: 2%;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    height: 4vh;
+}
+
+.input {
+    height: 26px;
+    width: 60vw;
+    font-size: 12pt;
+    border: 1px black;
+    border-radius: 50px;
+    padding-left: 10px;
+}
+
+.sendBtn {
+    height: 26px;
+    width: 26px;
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+    margin-left: -27px;
+    margin-bottom: 1px;
+}
+
+.sendBtn:hover {
+    background-color: gray;
+    cursor: pointer;
+}

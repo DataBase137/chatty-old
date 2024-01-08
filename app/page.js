@@ -1,89 +1,95 @@
-"use client";
+"use client"
 
-import { useEffect, useRef, useState } from "react";
-import styles from "./page.module.css"
-import { FaArrowUp } from "react-icons/fa"
-import supabase from "../utils/supabase";
+import { useEffect, useState, useRef } from "react";
+import styles from "./page.module.css";
+import Navbar from "./navbar";
+import { FaChevronDown } from "react-icons/fa";
 
 const Page = () => {
-  const textbox = useRef();
-  const scroll = useRef();
-  const [chatLogs, setChatLogs] = useState(null);
+  const TypeWriter = function (txtElement, words, wait = 5000) {
+    this.txtElement = txtElement;
+    this.words = words;
+    this.txt = '';
+    this.wordIndex = 0;
+    this.wait = parseInt(wait, 10);
+    this.type();
+    this.isDeleting = false;
+  };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (textbox.current.value) {
-      sendChatLog(textbox.current.value);
-      textbox.current.value = "";
-    }
-  }
+  // Type Method
+  TypeWriter.prototype.type = function () {
+    // Current index of word
+    const current = this.wordIndex % this.words.length;
+    // Get full text of current word
+    const fullTxt = this.words[current];
 
-  const getChatLogs = async () => {
-    let { data, error } = await supabase
-      .from('chat')
-      .select('*')
-    return data;
-  }
+    // Check if deleting
+    if (this.isDeleting) {
+      // Remove char
+      this.txt = fullTxt.substring(0, this.txt.length - 1);
+    } else {
+      // Add char
+      this.txt = fullTxt.substring(0, this.txt.length + 1);
+    };
 
-  const sendChatLog = async (log) => {
-    const { data, error } = await supabase
-      .from('chat')
-      .insert([
-        { text: log },
-      ])
-      .select()
-  }
+    // Insert txt into element
+    this.txtElement.innerHTML = `<span>${this.txt}<span></span></span>`;
 
+    // Initial Type Speed
+    let typeSpeed = 250;
 
-  const channel = supabase.channel('chat-log-changes')
-    .on(
-      'postgres_changes',
-      { event: '*', schema: 'public', table: 'chat' },
-      (payload) => {
-        if (payload.eventType === "INSERT") {
-          setChatLogs((current) => [...current, payload.new]);
-        } else if (payload.eventType === "DELETE") {
-          setChatLogs((current) => [current.find((element) => element.id !== payload.old.id)]);
-        }
-      }
-    )
-    .subscribe()
+    if (this.isDeleting) {
+      typeSpeed /= 2;
+    };
 
-  const fetchChat = async () => {
-    const chat = await getChatLogs();
-    setChatLogs(chat);
-  }
+    // If word is complete
+    if (!this.isDeleting && this.txt === fullTxt) {
+      // Make pause at end
+      typeSpeed = this.wait;
+      // Set delete to true
+      this.isDeleting = true;
+    } else if (this.isDeleting && this.txt === '') {
+      this.isDeleting = false;
+      // Move to next word
+      this.wordIndex++;
+      // Pause before start typing
+      typeSpeed = 1000;
+    };
+
+    setTimeout(() => this.type(), typeSpeed)
+  };
+
+  // Init App
+  const init = () => {
+    const txtElement = document.querySelector("#txt-type");
+    const words = JSON.parse(txtElement.getAttribute("data-words"));
+    const wait = txtElement.getAttribute("data-wait");
+    // Init TypeWriter
+    new TypeWriter(txtElement, words, wait);
+  };
 
   useEffect(() => {
-    fetchChat();
+    init();
   }, []);
-
-  useEffect(() => {
-    scroll.current.scrollIntoView(true);
-  }, [chatLogs]);
 
   return (
     <>
-      <div className={styles.chatLogContainer}>
-        {chatLogs ? chatLogs.map((log) => {
-          const date = new Date(log.created_at);
-          return (
-            <div className={styles.chatLog} key={log.id}>
-              <p className={styles.chatLogText}>{log.text}</p>
-              <p className={styles.chatLogTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
-            </div>
-          )
-        }) : ""}
-        <div ref={scroll}></div>
-      </div>
-      <div className={styles.typeArea}>
-        <form onSubmit={(event) => handleSubmit(event)}>
-          <input type="text" placeholder="Type a message" ref={textbox} name="textbox" className={styles.input} />
-          <button type="submit" className={styles.sendBtn}><FaArrowUp /></button>
-        </form>
+      <Navbar />
+      <div className={styles.homeContainer}>
+        <div className={styles.downArrowContainer}>
+          <FaChevronDown className={styles.downArrow} />
+        </div>
+        <div className={styles.topLeft}>
+          <div className={styles.topContent}>
+            <span className={styles.txtType} id="txt-type" data-wait="2000" data-words='["Connect", "Meet", "Talk"]'><span></span></span>
+            <p className={styles.slogan}>Connect with family. Meet new friends. All with one click.</p>
+            <button className={styles.btn}>Join Now</button>
+          </div>
+        </div>
+        <div className={styles.topRight} />
       </div>
     </>
-  )
+  );
 }
 
 export default Page;

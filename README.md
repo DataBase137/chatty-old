@@ -11,6 +11,8 @@
 
 # Things to redo/update
 - Padding and styling on scroll bar
+- Change home page layout
+- Change home page background
 
 # Known bugs/Things to Fix:
 - 
