@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import styles from "./page.module.css"
 import { FaArrowUp } from "react-icons/fa"
 import supabase from "../../utils/supabase";
@@ -19,6 +19,9 @@ const Page = () => {
     }
 
     const getChatLogs = async () => {
+        await new Promise(resolve => {
+            setTimeout(resolve, 3000);
+        })
         let { data, error } = await supabase
             .from('chat')
             .select('*')
@@ -58,30 +61,34 @@ const Page = () => {
     }, []);
 
     useEffect(() => {
-        scroll.current.scrollIntoView(true);
+        if (scroll.current) {
+            scroll.current.scrollIntoView(true);
+        }
     }, [chatLogs]);
 
     return (
-        <div className={styles.container}>
-            <div className={styles.chat}>
-                {chatLogs ? chatLogs.map((log) => {
-                    const date = new Date(log.created_at);
-                    return (
-                        <div className={styles.chatLog} key={log.id}>
-                            <p className={styles.chatLogText}>{log.text}</p>
-                            <p className={styles.chatLogTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
-                        </div>
-                    )
-                }) : ""}
-                <div ref={scroll}></div>
+        <Suspense>
+            <div className={styles.container}>
+                <div className={styles.chat}>
+                    {chatLogs ? chatLogs.map((log) => {
+                        const date = new Date(log.created_at);
+                        return (
+                            <div className={styles.chatLog} key={log.id}>
+                                <p className={styles.chatLogText}>{log.text}</p>
+                                <p className={styles.chatLogTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
+                            </div>
+                        )
+                    }) : ""}
+                    <div ref={scroll}></div>
+                </div>
+                <div className={styles.typeArea}>
+                    <form onSubmit={(event) => handleSubmit(event)}>
+                        <input type="text" placeholder="Type a message" ref={textbox} name="textbox" className={styles.input} />
+                        <button type="submit" className={styles.sendBtn}><FaArrowUp /></button>
+                    </form>
+                </div>
             </div>
-            <div className={styles.typeArea}>
-                <form onSubmit={(event) => handleSubmit(event)}>
-                    <input type="text" placeholder="Type a message" ref={textbox} name="textbox" className={styles.input} />
-                    <button type="submit" className={styles.sendBtn}><FaArrowUp /></button>
-                </form>
-            </div>
-        </div>
+        </Suspense>
     )
 }
 

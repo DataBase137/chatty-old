@@ -82,11 +82,12 @@ const Page = () => {
         <div className={styles.topLeft}>
           <div className={styles.topContent}>
             <span className={styles.txtType} id="txt-type" data-wait="2000" data-words='["Connect", "Meet", "Talk"]'><span></span></span>
-            <p className={styles.slogan}>Connect with family. Meet new friends. All with one click.</p>
-            <button className={styles.btn}>Join Now</button>
+            <p className={styles.slogan}>Contact <span>family</span>. Find new <span>friends</span>. All with one click.</p>
+            <button className={styles.btn}>Learn More</button>
           </div>
         </div>
-        <div className={styles.topRight} />
+        <div className={styles.topRight}>
+        </div>
       </div>
     </>
   );

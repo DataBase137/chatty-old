@@ -17,6 +17,14 @@
     font-weight: 900;
 }
 
+.logo a {
+    color: #000;
+}
+
+.logo a:hover {
+    color: #636363;
+}
+
 .links {
     display: flex;
 }

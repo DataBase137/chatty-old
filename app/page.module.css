@@ -53,9 +53,13 @@
 
 .slogan {
     font-family: "Martel Sans", sans-serif;
-    font-size: 22px;
+    font-size: 23px;
     font-weight: 700;
     padding: 13px 0;
+}
+
+.slogan span {
+    color: #41337A;
 }
 
 .btn {
@@ -68,9 +72,9 @@
     border: none;
     color: #fff;
     text-align: center;
-    padding: 10px 30px;
+    padding: 12px 30px;
     cursor: pointer;
-    width: 132px;
+    width: 147px;
 }
 
 .btn:hover {
