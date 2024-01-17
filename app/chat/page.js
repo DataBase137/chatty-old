@@ -19,9 +19,6 @@ const Page = () => {
     }
 
     const getChatLogs = async () => {
-        await new Promise(resolve => {
-            setTimeout(resolve, 3000);
-        })
         let { data, error } = await supabase
             .from('chat')
             .select('*')
@@ -44,8 +41,6 @@ const Page = () => {
             (payload) => {
                 if (payload.eventType === "INSERT") {
                     setChatLogs((current) => [...current, payload.new]);
-                } else if (payload.eventType === "DELETE") {
-                    setChatLogs((current) => [current.find((element) => element.id !== payload.old.id)]);
                 }
             }
         )

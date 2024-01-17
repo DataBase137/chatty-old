@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react";
-import styles from "./page.module.css";
+import * as styles from "./page.module.css";
 import Navbar from "./navbar";
 import { FaChevronDown } from "react-icons/fa";
 
