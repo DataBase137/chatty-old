@@ -61,6 +61,12 @@ const Page = () => {
         }
     }, [chatLogs]);
 
+    const signOut = async () => {
+        const { error } = await supabase.auth.signOut();
+
+        if (error) console.error(error);
+    }
+
     return (
         <Suspense>
             <div className={styles.container}>
@@ -83,6 +89,7 @@ const Page = () => {
                     </form>
                 </div>
             </div>
+            <button onClick={() => signOut()}>Sign Out</button>
         </Suspense>
     )
 }

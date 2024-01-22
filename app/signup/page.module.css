@@ -1,0 +1,16 @@
+.container {
+    --color-1: #F2CEE6;
+    --color-2: #41337A;
+    --color-2-2: #A9AAFC;
+    --color-2-3: #594A94;
+    --color-3: #6EA4BF;
+    --color-4: #C2EFEB;
+    --color-5: #ECFEE8;
+
+    --dark-bg: #121212;
+    --dark-bg-2: #222;
+    --dark-text: #F7F7F7;
+    --dark-hover: #D3D3D3;
+
+    --light-bg: #FAFAFA;
+}
