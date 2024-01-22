@@ -14,22 +14,22 @@ const Page = () => {
     }
 
     const signup = async (email, password) => {
-        const { data, error } = await supabase.auth.signUp({
+        const { data: user, error } = await supabase.auth.signUp({
             email,
             password,
             options: {
-                emailRedirectTo: 'http://localhost:3000/chat'
+                emailRedirectTo: 'http://localhost:3000/setup/'
             }
         });
 
-        if (error) console.error(error, data); else console.log(data);
+        if (error) console.error(error, data); else console.log(user);
     }
 
     return (
         <div className={styles.container}>
             <form onSubmit={(event) => handleSubmit(event)}>
-                <input type="text" placeholder="Email" ref={email} name="email" className={styles.email} />
-                <input type="text" placeholder="Password" ref={password} name="password" className={styles.password} />
+                <input type="email" placeholder="Email" ref={email} name="email" className={styles.email} />
+                <input type="password" placeholder="Password" ref={password} name="password" minLength="6" className={styles.password} />
                 <button type="submit" className={styles.sendBtn}>Sign Up</button>
             </form>
         </div>

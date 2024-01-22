@@ -9,6 +9,7 @@ const Page = () => {
     const textbox = useRef();
     const scroll = useRef();
     const [chatLogs, setChatLogs] = useState(null);
+    let user;
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -51,8 +52,16 @@ const Page = () => {
         setChatLogs(chat);
     }
 
+    const fetchUser = async () => {
+        const { data, errror } = await supabase.auth.getUser();
+        user = data;
+        console.log(user);
+
+    }
+
     useEffect(() => {
         fetchChat();
+        fetchUser();
     }, []);
 
     useEffect(() => {
@@ -62,7 +71,7 @@ const Page = () => {
     }, [chatLogs]);
 
     const signOut = async () => {
-        const { error } = await supabase.auth.signOut();
+        const { error } = await supabase.auth.signOut({ scope: 'local' });
 
         if (error) console.error(error);
     }
