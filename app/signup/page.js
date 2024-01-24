@@ -7,22 +7,29 @@ import { useRef } from "react";
 const Page = () => {
     const email = useRef();
     const password = useRef();
+    const username = useRef();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        signup(email.current.value, password.current.value);
+        signup(email.current.value, password.current.value, username.current.value);
     }
 
-    const signup = async (email, password) => {
+    const signup = async (email, password, username) => {
         const { data: user, error } = await supabase.auth.signUp({
             email,
             password,
             options: {
-                emailRedirectTo: 'http://localhost:3000/setup/'
+                data: {
+                    username,
+                    display_name: username,
+                    email,
+                    avatar_url: ""
+                },
+                emailRedirectTo: 'http://localhost:3000/chat/'
             }
         });
 
-        if (error) console.error(error, data); else console.log(user);
+        if (error) console.error(error, user); else console.log(user);
     }
 
     return (
@@ -30,6 +37,7 @@ const Page = () => {
             <form onSubmit={(event) => handleSubmit(event)}>
                 <input type="email" placeholder="Email" ref={email} name="email" className={styles.email} />
                 <input type="password" placeholder="Password" ref={password} name="password" minLength="6" className={styles.password} />
+                <input type="text" placeholder="Username" ref={username} name="username" minLength="3" className={styles.username} />
                 <button type="submit" className={styles.sendBtn}>Sign Up</button>
             </form>
         </div>
