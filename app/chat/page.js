@@ -4,12 +4,14 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import styles from "./page.module.css"
 import { FaArrowUp } from "react-icons/fa"
 import supabase from "../../utils/supabase";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
     const textbox = useRef();
     const scroll = useRef();
     const [chatLogs, setChatLogs] = useState(null);
-    let user;
+    const [user, setUser] = useState();
+    const router = useRouter();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -53,14 +55,16 @@ const Page = () => {
     }
 
     const fetchUser = async () => {
-        const { data, errror } = await supabase.auth.getUser();
-        user = data;
-        console.log(user);
-
+        const { data, error } = await supabase.auth.getUser();
+        if (error) {
+            router.push("/login");
+        } else {
+            setUser(data);
+            fetchChat();
+        }
     }
 
     useEffect(() => {
-        fetchChat();
         fetchUser();
     }, []);
 
@@ -73,12 +77,15 @@ const Page = () => {
     const signOut = async () => {
         const { error } = await supabase.auth.signOut({ scope: 'local' });
 
-        if (error) console.error(error);
+        if (error) console.error(error); else router.push("/login");
     }
 
     return (
-        <Suspense>
-            <div className={styles.container}>
+        <div className={styles.container}>
+            <Suspense>
+                <div className={styles.user}>
+                    {user ? user.email : ""}
+                </div>
                 <div className={styles.chat}>
                     {chatLogs ? chatLogs.map((log) => {
                         const date = new Date(log.created_at);
@@ -97,9 +104,9 @@ const Page = () => {
                         <button type="submit" className={styles.sendBtn}><FaArrowUp /></button>
                     </form>
                 </div>
-            </div>
-            <button onClick={() => signOut()}>Sign Out</button>
-        </Suspense>
+                <button onClick={() => signOut()}>Sign Out</button>
+            </Suspense>
+        </div>
     )
 }
 
