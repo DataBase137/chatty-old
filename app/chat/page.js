@@ -13,6 +13,7 @@ const Page = () => {
     const [user, setUser] = useState();
     const router = useRouter();
 
+
     const handleSubmit = (event) => {
         event.preventDefault();
         if (textbox.current.value) {
@@ -23,14 +24,14 @@ const Page = () => {
 
     const getChatLogs = async () => {
         let { data, error } = await supabase
-            .from('chat')
+            .from('messages')
             .select('*')
         return data;
     }
 
     const sendChatLog = async (log) => {
         const { data, error } = await supabase
-            .from('chat')
+            .from('messages')
             .insert([
                 { text: log },
             ])
@@ -40,7 +41,7 @@ const Page = () => {
     const channel = supabase.channel('chat-log-changes')
         .on(
             'postgres_changes',
-            { event: '*', schema: 'public', table: 'chat' },
+            { event: '*', schema: 'public', table: 'messages' },
             (payload) => {
                 if (payload.eventType === "INSERT") {
                     setChatLogs((current) => [...current, payload.new]);
@@ -80,6 +81,14 @@ const Page = () => {
         if (error) console.error(error); else router.push("/login");
     }
 
+    const fetchProfile = async () => {
+        const {data, error} = await supabase
+        .from('profiles')
+        .select('*')
+        .match({id: message.profile_id})
+        .single()
+    }
+
     return (
         <div className={styles.container}>
             <Suspense>
@@ -87,11 +96,11 @@ const Page = () => {
                     {user ? user.email : ""}
                 </div>
                 <div className={styles.chat}>
-                    {chatLogs ? chatLogs.map((log) => {
-                        const date = new Date(log.created_at);
+                    {chatLogs ? chatLogs.map((message) => {
+                        const date = new Date(message.created_at);
                         return (
-                            <div className={styles.chatLog} key={log.id}>
-                                <p className={styles.chatLogText}>{log.text}</p>
+                            <div className={styles.chatLog} key={message.id}>
+                                <p className={styles.chatLogText}>{message.text}</p>
                                 <p className={styles.chatLogTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
                             </div>
                         )

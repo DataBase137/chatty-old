@@ -29,7 +29,7 @@ const Page = () => {
             }
         });
 
-        if (error) console.error(error, user); else console.log(user);
+        if (error) console.error(error, user);
     }
 
     return (
