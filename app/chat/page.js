@@ -82,11 +82,11 @@ const Page = () => {
     }
 
     const fetchProfile = async () => {
-        const {data, error} = await supabase
-        .from('profiles')
-        .select('*')
-        .match({id: message.profile_id})
-        .single()
+        const { data, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .match({ id: message.profile_id })
+            .single()
     }
 
     return (

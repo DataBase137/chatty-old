@@ -7,6 +7,7 @@
     --color-2-3: #594A94;
     --color-3: #6EA4BF;
     --color-4: #C2EFEB;
+    --color-4-2: #a1dbd6;
     --color-5: #ECFEE8;
 
     --dark-bg: #121212;
@@ -15,6 +16,8 @@
     --dark-hover: #D3D3D3;
 
     --light-bg: #FAFAFA;
+    --light-text: #121212;
+    --light-hover: #666666;
 }
 
 .nav {
@@ -35,11 +38,11 @@
 }
 
 .logo a {
-    color: var(--dark-text);
+    color: var(--light-text);
 }
 
 .logo a:hover {
-    color: var(--dark-hover);
+    color: var(--light-hover);
 }
 
 .links {
@@ -53,14 +56,14 @@
 }
 
 .links a {
-    color: var(--dark-text);
+    color: var(--light-text);
     padding: 1.6rem 1rem;
     display: block;
     font-weight: 900;
 }
 
 .links a:hover {
-    color: var(--dark-hover);
+    color: var(--light-hover);
 }
 
 .joinBtn {

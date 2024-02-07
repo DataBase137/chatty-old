@@ -7,6 +7,7 @@
     --color-2-3: #594A94;
     --color-3: #6EA4BF;
     --color-4: #C2EFEB;
+    --color-4-2: #a1dbd6;
     --color-5: #ECFEE8;
 
     --dark-bg: #121212;
@@ -15,6 +16,8 @@
     --dark-hover: #D3D3D3;
 
     --light-bg: #FAFAFA;
+    --light-text: #121212;
+    --light-hover: #666666;
 }
 
 .homeContainer {
@@ -22,7 +25,7 @@
     width: 100vw;
     display: grid;
     grid-template-columns: repeat(auto-fill, 50%);
-    background: var(--dark-bg-2);
+    background: var(--light-bg);
 }
 
 .txtType {
@@ -30,7 +33,7 @@
     font-size: 4rem;
     font-variant: small-caps;
     font-weight: 500;
-    color: var(--dark-text);
+    color: var(--light-text);
 }
 
 .txtType>span>span {
@@ -65,11 +68,11 @@
     font-size: 23px;
     font-weight: 700;
     padding: 13px 0;
-    color: var(--dark-text);
+    color: var(--light-text);
 }
 
 .slogan span {
-    color: var(--color-2-2);
+    color: var(--color-4-2);
 }
 
 .btn {
@@ -78,7 +81,7 @@
     line-height: 130%;
     font-size: 17px;
     border-radius: 3px;
-    background-color: var(--color-2);
+    background-color: var(--color-4-2);
     border: none;
     color: var(--dark-text);
     text-align: center;
@@ -88,7 +91,7 @@
 }
 
 .btn:hover {
-    background-color: var(--color-2-3);
+    background-color: var(--color-4);
 }
 
 .downArrowContainer {
@@ -100,7 +103,7 @@
     bottom: 10%;
     animation: bounce 2s ease infinite;
     z-index: 1000;
-    color: var(--dark-text);
+    color: var(--light-text);
 }
 
 .downArrow {
@@ -119,4 +122,15 @@
     100% {
         transform: translateY(0);
     }
+}
+
+.svg {
+    /* width: 210mm;
+    height: 297mm; */
+    width: fill;
+    height: fill;
+}
+
+.svgShape {
+    fill: #6ea4bf;
 }

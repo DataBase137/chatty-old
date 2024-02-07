@@ -21,9 +21,7 @@ const Page = () => {
             options: {
                 data: {
                     username,
-                    display_name: username,
-                    email,
-                    avatar_url: ""
+                    email
                 },
                 emailRedirectTo: 'http://localhost:3000/chat/'
             }

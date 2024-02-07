@@ -2,17 +2,13 @@
  a chat app
 
 # Things to add
-- Account login/signup
 - Deletion, editing, and more features
 - Separate chats with people
 - Group chats
-- Color scheme, sidebar, dark mode?
-- Loading Screen
+- Profiles in chat area
 
 # Things to redo/update
-- Padding and styling on scroll bar
-- Change home page layout
-- Change home page background
+- Signup/login page styles
 
 # Known bugs/Things to Fix:
-- 
+- Chat page loading before it realizes to redirect to login (generally loading not working)

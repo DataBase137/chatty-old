@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react";
-import * as styles from "./page.module.css";
+import styles from "./page.module.css";
 import Navbar from "./navbar";
 import { FaChevronDown } from "react-icons/fa";
 
@@ -82,11 +82,12 @@ const Page = () => {
         <div className={styles.topLeft}>
           <div className={styles.topContent}>
             <span className={styles.txtType} id="txt-type" data-wait="2000" data-words='["Connect", "Meet", "Talk"]'><span></span></span>
-            <p className={styles.slogan}>Contact <span>family</span>. Find new <span>friends</span>. All with one click.</p>
+            <p className={styles.slogan}>Contact <span>family</span>. Chat with <span>friends</span>. All with one click.</p>
             <button className={styles.btn}>Learn More</button>
           </div>
         </div>
         <div className={styles.topRight}>
+          <svg className={styles.svg} ><circle className={styles.svgShape} id="circle1" cx="146.28088" cy="151.30965" r="15" /><circle className={styles.svgShape} id="path1-2" cx="67.325775" cy="151.30965" r="15" /><rect className={styles.svgShape} id="rect1" width="79.947624" height="30" x="67.612198" y="136.30927" /></svg>
         </div>
       </div>
     </>
