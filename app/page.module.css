@@ -1,14 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Martel+Sans:wght@200;300;400;600;700;800;900&display=swap');
 
-.homeContainer {
+.container {
     --color-1: #F2CEE6;
     --color-2: #41337A;
     --color-2-2: #A9AAFC;
     --color-2-3: #594A94;
     --color-3: #6EA4BF;
+    --color-3-2: #588ca7;
     --color-4: #C2EFEB;
     --color-4-2: #a1dbd6;
     --color-5: #ECFEE8;
+    --color-6: #331E36;
 
     --dark-bg: #121212;
     --dark-bg-2: #222;
@@ -20,9 +22,7 @@
     --light-hover: #666666;
 }
 
-.homeContainer {
-    height: 100vh;
-    width: 100vw;
+.container {
     display: grid;
     grid-template-columns: repeat(auto-fill, 50%);
     background: var(--light-bg);
@@ -37,7 +37,7 @@
 }
 
 .txtType>span>span {
-    border-right: .5rem solid #fff;
+    border-right: .5rem solid var(--light-text);
     animation: blinker 1s linear infinite;
 }
 
@@ -81,17 +81,17 @@
     line-height: 130%;
     font-size: 17px;
     border-radius: 3px;
-    background-color: var(--color-4-2);
+    background-color: var(--color-3);
     border: none;
     color: var(--dark-text);
     text-align: center;
     padding: 12px 30px;
     cursor: pointer;
-    width: 147px;
+    width: 127px;
 }
 
 .btn:hover {
-    background-color: var(--color-4);
+    background-color: var(--color-3-2);
 }
 
 .downArrowContainer {
@@ -124,13 +124,6 @@
     }
 }
 
-.svg {
-    /* width: 210mm;
-    height: 297mm; */
-    width: fill;
-    height: fill;
-}
-
 .svgShape {
-    fill: #6ea4bf;
+    fill: var(--color-6);
 }

@@ -11,8 +11,8 @@ const Navbar = () => {
             <div className={styles.links}>
                 <ul>
                     <li><Link href="/chat">Chat</Link></li>
-                    <li><Link href="#">Link</Link></li>
-                    <li><Link href="#">Link</Link></li>
+                    <li><Link href="#">Features</Link></li>
+                    <li><Link href="#">Privacy</Link></li>
                 </ul>
                 <button className={styles.joinBtn} onClick={() => router.push("/signup")}>Sign Up</button>
             </div>

@@ -1,11 +1,28 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react";
-import styles from "./page.module.css";
+import { useEffect, useState, useRef, Suspense } from "react";
+import * as styles from "./page.module.css";
 import Navbar from "./navbar";
 import { FaChevronDown } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import supabase from "../utils/supabase";
+
 
 const Page = () => {
+  const router = useRouter();
+  let user;
+
+  const userPromise = new Promise(async (resolve, reject) => {
+    const { data: user, error } = await supabase.auth.getUser();
+    if (error) {
+        resolve(user);
+    } else {
+        router.push("/chat");
+    }
+  });
+
+  userPromise.then((userObj) => user = userObj)
+
   const TypeWriter = function (txtElement, words, wait = 5000) {
     this.txtElement = txtElement;
     this.words = words;
@@ -68,14 +85,14 @@ const Page = () => {
     new TypeWriter(txtElement, words, wait);
   };
 
+
   useEffect(() => {
     init();
   }, []);
 
   return (
-    <>
-      <Navbar />
-      <div className={styles.homeContainer}>
+    <div className={styles.container}>
+        <Navbar />
         <div className={styles.downArrowContainer}>
           <FaChevronDown className={styles.downArrow} />
         </div>
@@ -83,14 +100,13 @@ const Page = () => {
           <div className={styles.topContent}>
             <span className={styles.txtType} id="txt-type" data-wait="2000" data-words='["Connect", "Meet", "Talk"]'><span></span></span>
             <p className={styles.slogan}>Contact <span>family</span>. Chat with <span>friends</span>. All with one click.</p>
-            <button className={styles.btn}>Learn More</button>
+            <button className={styles.btn} onClick={() => router.push("/signup")}>Sign Up</button>
           </div>
         </div>
         <div className={styles.topRight}>
-          <svg className={styles.svg} ><circle className={styles.svgShape} id="circle1" cx="146.28088" cy="151.30965" r="15" /><circle className={styles.svgShape} id="path1-2" cx="67.325775" cy="151.30965" r="15" /><rect className={styles.svgShape} id="rect1" width="79.947624" height="30" x="67.612198" y="136.30927" /></svg>
+          <svg className={styles.svg} width="390" height="90" viewBox="0 0 390 90" ><circle className={styles.svgShape} cx="345" cy="45" r="45" /><circle className={styles.svgShape} cx="45" cy="45" r="45" /><rect className={styles.svgShape} width="300" height="90" x="45" /></svg>
         </div>
-      </div>
-    </>
+    </div>
   );
 }
 

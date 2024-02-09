@@ -6,8 +6,11 @@
     --color-2-2: #A9AAFC;
     --color-2-3: #594A94;
     --color-3: #6EA4BF;
+    --color-3-2: #588ca7;
     --color-4: #C2EFEB;
+    --color-4-2: #a1dbd6;
     --color-5: #ECFEE8;
+    --color-6: #331E36;
 
     --dark-bg: #121212;
     --dark-bg-2: #222;
@@ -15,14 +18,15 @@
     --dark-hover: #D3D3D3;
 
     --light-bg: #FAFAFA;
+    --light-text: #121212;
+    --light-hover: #666666;
 }
-
 .chat::-webkit-scrollbar {
     display: none;
 }
 
 .container {
-    background-color: var(--dark-bg-2);
+    background-color: var(--light-bg);
 }
 
 .chat {
@@ -36,7 +40,7 @@
     align-items: center;
     justify-content: space-between;
     font-family: "Roboto";
-    color: var(--dark-text);
+    color: var(--light-text);
 }
 
 .chatLogTime {
@@ -52,7 +56,7 @@
     width: 100%;
     justify-content: center;
     height: 4vh;
-    background-color: var(--dark-bg-2);
+    background-color: var(--light-bg);
 }
 
 .input {
@@ -62,15 +66,15 @@
     border: none;
     border-radius: 50px;
     padding-left: 10px;
-    background-color: var(--dark-bg-2);
-    color: var(--dark-text);
+    background-color: var(--light-bg);
+    color: var(--light-text);
 }
 
 .sendBtn {
     height: 26px;
     width: 26px;
-    background-color: var(--dark-bg-2);
-    color: var(--dark-text);
+    background-color: var(--light-bg);
+    color: var(--light-text);
     border: none;
     border-radius: 50%;
     margin-left: -27px;
@@ -78,6 +82,6 @@
 }
 
 .sendBtn:hover {
-    background-color: gray;
+    background-color: #c7c7c7;
     cursor: pointer;
 }
