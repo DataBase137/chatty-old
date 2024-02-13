@@ -1,41 +1,29 @@
 "use client";
 
-import { Suspense, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./page.module.css"
 import { FaArrowUp } from "react-icons/fa"
 import supabase from "../../utils/supabase";
 import { useRouter } from "next/navigation";
+import Loading from "../loading";
+import sendMessage from "../../utils/sendmessage";
+import getMessages from "../../utils/getmessages";
+import getProfile from "../../utils/getprofile";
 
 const Page = () => {
     const textbox = useRef();
     const scroll = useRef();
     const [chatLogs, setChatLogs] = useState(null);
-    const [user, setUser] = useState();
+    const [user, setUser] = useState(false);
     const router = useRouter();
 
 
     const handleSubmit = (event) => {
         event.preventDefault();
         if (textbox.current.value) {
-            sendChatLog(textbox.current.value);
+            sendMessage(textbox.current.value);
             textbox.current.value = "";
         }
-    }
-
-    const getChatLogs = async () => {
-        let { data, error } = await supabase
-            .from('messages')
-            .select('*')
-        return data;
-    }
-
-    const sendChatLog = async (log) => {
-        const { data, error } = await supabase
-            .from('messages')
-            .insert([
-                { text: log },
-            ])
-            .select()
     }
 
     const channel = supabase.channel('chat-log-changes')
@@ -51,23 +39,9 @@ const Page = () => {
         .subscribe()
 
     const fetchChat = async () => {
-        const chat = await getChatLogs();
+        const chat = await getMessages();
         setChatLogs(chat);
     }
-
-    const fetchUser = async () => {
-        const { data, error } = await supabase.auth.getUser();
-        if (error) {
-            router.push("/login");
-        } else {
-            setUser(data);
-            fetchChat();
-        }
-    }
-
-    useEffect(() => {
-        fetchUser();
-    }, []);
 
     useEffect(() => {
         if (scroll.current) {
@@ -81,41 +55,51 @@ const Page = () => {
         if (error) console.error(error); else router.push("/login");
     }
 
-    const fetchProfile = async () => {
-        const { data, error } = await supabase
-            .from('profiles')
-            .select('*')
-            .match({ id: message.profile_id })
-            .single()
-    }
+    const userPromise = new Promise(async (resolve, reject) => {
+        const { data, error } = await supabase.auth.getUser();
+        if (error) reject(); else resolve(data);
+    });
+
+    useEffect(() => {
+        userPromise
+            .then((data) => {
+                setUser(data);
+                fetchChat();
+            })
+            .catch(() => router.push("/login"));
+    }, []);
 
     return (
-        <div className={styles.container}>
-            <Suspense>
-                <div className={styles.user}>
-                    {user ? user.email : ""}
+        <>
+            {user ?
+                <div className={styles.container}>
+                    <div className={styles.user}>
+                        {user ? user.email : ""}
+                    </div>
+                    <div className={styles.chat}>
+                        {chatLogs ? chatLogs.map(async (message) => {
+                            const date = new Date(message.created_at);
+                            // const profile = await getProfile(message.profile_id);
+                            return (
+                                <div className={styles.chatLog} key={message.id}>
+                                    {/* <p>{profile[0].username}</p> */}
+                                    <p className={styles.chatLogText}>{message.text}</p>
+                                    <p className={styles.chatLogTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
+                                </div>
+                            )
+                        }) : ""}
+                        <div ref={scroll}></div>
+                    </div>
+                    <div className={styles.typeArea}>
+                        <form onSubmit={(event) => handleSubmit(event)}>
+                            <input type="text" placeholder="Type a message" ref={textbox} name="textbox" className={styles.input} autoComplete="false" />
+                            <button type="submit" className={styles.sendBtn}><FaArrowUp /></button>
+                        </form>
+                    </div>
+                    <button onClick={() => signOut()}>Sign Out</button>
                 </div>
-                <div className={styles.chat}>
-                    {chatLogs ? chatLogs.map((message) => {
-                        const date = new Date(message.created_at);
-                        return (
-                            <div className={styles.chatLog} key={message.id}>
-                                <p className={styles.chatLogText}>{message.text}</p>
-                                <p className={styles.chatLogTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
-                            </div>
-                        )
-                    }) : ""}
-                    <div ref={scroll}></div>
-                </div>
-                <div className={styles.typeArea}>
-                    <form onSubmit={(event) => handleSubmit(event)}>
-                        <input type="text" placeholder="Type a message" ref={textbox} name="textbox" className={styles.input} />
-                        <button type="submit" className={styles.sendBtn}><FaArrowUp /></button>
-                    </form>
-                </div>
-                <button onClick={() => signOut()}>Sign Out</button>
-            </Suspense>
-        </div>
+                : <Loading />}
+        </>
     )
 }
 

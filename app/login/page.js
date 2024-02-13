@@ -1,14 +1,16 @@
 "use client";
 
 import styles from "./page.module.css";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import supabase from "../../utils/supabase";
 import { useRouter } from "next/navigation";
+import Loading from "../loading";
 
 const Page = () => {
     const email = useRef();
     const password = useRef();
     const router = useRouter();
+    const [noUser, setNoUser] = useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -21,25 +23,40 @@ const Page = () => {
             password
         });
 
-        if (error) console.error(error); else router.push("/chat");
+        if (!error) router.push("/chat");
     }
 
-    return (
-        <div className={styles.container}>
-            <div className={styles.left}>
+    const userPromise = new Promise(async (resolve, reject) => {
+        const { data, error } = await supabase.auth.getUser();
+        if (error) resolve(); else reject();
+    });
 
-            </div>
-            <div className={styles.right}>
-                <div className={styles.module}>
-                    <form onSubmit={(event) => handleSubmit(event)}>
-                        <input type="email" placeholder="Email" ref={email} name="email" className={styles.input} autoComplete="email"/>
-                        <input type="password" placeholder="Password" ref={password} name="password" minLength="6" className={styles.input} autoComplete="current-password" />
-                        <button type="submit" className={styles.sendBtn}>Log in</button>
-                    </form>
-                    <p className={styles.redirect}>Not a user yet? <a onClick={() => { router.push("/signup") }}>Sign Up</a></p>
+    useEffect(() => {
+        userPromise
+            .then(() => setNoUser(true))
+            .catch(() => router.push("/chat"));
+    }, []);
+
+    return (
+        <>
+            {noUser ?
+                <div className={styles.container}>
+                    <div className={styles.left}>
+
+                    </div>
+                    <div className={styles.right}>
+                        <div className={styles.module}>
+                            <form onSubmit={(event) => handleSubmit(event)}>
+                                <input type="email" placeholder="Email" ref={email} name="email" className={styles.input} autoComplete="email" />
+                                <input type="password" placeholder="Password" ref={password} name="password" minLength="6" className={styles.input} autoComplete="current-password" />
+                                <button type="submit" className={styles.sendBtn}>Log in</button>
+                            </form>
+                            <p className={styles.redirect}>Not a user yet? <a onClick={() => { router.push("/signup") }}>Sign Up</a></p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+                : <Loading />}
+        </>
     );
 }
 
