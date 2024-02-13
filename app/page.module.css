@@ -1,27 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Martel+Sans:wght@200;300;400;600;700;800;900&display=swap');
-
-.container {
-    --color-1: #F2CEE6;
-    --color-2: #41337A;
-    --color-2-2: #A9AAFC;
-    --color-2-3: #594A94;
-    --color-3: #6EA4BF;
-    --color-3-2: #588ca7;
-    --color-4: #C2EFEB;
-    --color-4-2: #a1dbd6;
-    --color-5: #ECFEE8;
-    --color-6: #331E36;
-
-    --dark-bg: #121212;
-    --dark-bg-2: #222;
-    --dark-text: #F7F7F7;
-    --dark-hover: #D3D3D3;
-
-    --light-bg: #FAFAFA;
-    --light-text: #121212;
-    --light-hover: #666666;
-}
-
 .container {
     display: grid;
     grid-template-columns: repeat(auto-fill, 50%);
@@ -56,6 +32,22 @@
 }
 
 .topRight {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.bottomLeft {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.bottomRight {
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -122,8 +114,4 @@
     100% {
         transform: translateY(0);
     }
-}
-
-.svgShape {
-    fill: var(--color-6);
 }

@@ -1,16 +1,24 @@
 .container {
-    --color-1: #F2CEE6;
-    --color-2: #41337A;
-    --color-2-2: #A9AAFC;
-    --color-2-3: #594A94;
-    --color-3: #6EA4BF;
-    --color-4: #C2EFEB;
-    --color-5: #ECFEE8;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 50%);
+    background: var(--light-bg);
+}
 
-    --dark-bg: #121212;
-    --dark-bg-2: #222;
-    --dark-text: #F7F7F7;
-    --dark-hover: #D3D3D3;
+.right {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
 
-    --light-bg: #FAFAFA;
+.input {
+    font-size: 1.5rem;
+    font-family: "Roboto";
+    font-weight: 400;
+}
+
+.redirect {
+    font-size: 1.5rem;
+    font-family: "Roboto";
 }

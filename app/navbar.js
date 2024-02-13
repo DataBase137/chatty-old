@@ -14,7 +14,7 @@ const Navbar = () => {
                     <li><Link href="#">Features</Link></li>
                     <li><Link href="#">Privacy</Link></li>
                 </ul>
-                <button className={styles.joinBtn} onClick={() => router.push("/signup")}>Sign Up</button>
+                <button className={styles.joinBtn} onClick={() => router.push("/login")}>Log In</button>
             </div>
         </nav>
     );

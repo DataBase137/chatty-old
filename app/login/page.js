@@ -12,7 +12,7 @@ const Page = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        login(email.current.value, password.current.value);
+        if (email.current.value && password.current.value) login(email.current.value, password.current.value);
     }
 
     const login = async (email, password) => {
@@ -26,11 +26,19 @@ const Page = () => {
 
     return (
         <div className={styles.container}>
-            <form onSubmit={(event) => handleSubmit(event)}>
-                <input type="email" placeholder="Email" ref={email} name="email" className={styles.email} />
-                <input type="password" placeholder="Password" ref={password} name="password" minLength="6" className={styles.password} />
-                <button type="submit" className={styles.sendBtn}>Log in</button>
-            </form>
+            <div className={styles.left}>
+
+            </div>
+            <div className={styles.right}>
+                <div className={styles.module}>
+                    <form onSubmit={(event) => handleSubmit(event)}>
+                        <input type="email" placeholder="Email" ref={email} name="email" className={styles.input} autoComplete="email"/>
+                        <input type="password" placeholder="Password" ref={password} name="password" minLength="6" className={styles.input} autoComplete="current-password" />
+                        <button type="submit" className={styles.sendBtn}>Log in</button>
+                    </form>
+                    <p className={styles.redirect}>Not a user yet? <a onClick={() => { router.push("/signup") }}>Sign Up</a></p>
+                </div>
+            </div>
         </div>
     );
 }
