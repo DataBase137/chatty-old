@@ -5,10 +5,8 @@ import styles from "./page.module.css"
 import { FaArrowUp } from "react-icons/fa"
 import supabase from "../../utils/supabase";
 import { useRouter } from "next/navigation";
-import Loading from "../loading";
 import sendMessage from "../../utils/sendmessage";
 import getMessages from "../../utils/getmessages";
-import getProfile from "../../utils/getprofile";
 
 const Page = () => {
     const textbox = useRef();
@@ -55,50 +53,44 @@ const Page = () => {
         if (error) console.error(error); else router.push("/login");
     }
 
-    const userPromise = new Promise(async (resolve, reject) => {
+    const getUser = async () => {
         const { data, error } = await supabase.auth.getUser();
-        if (error) reject(); else resolve(data);
-    });
+
+        if (error) router.push("/login"); else return data;
+    }
 
     useEffect(() => {
-        userPromise
+        getUser()
             .then((data) => {
-                setUser(data);
-                fetchChat();
-            })
-            .catch(() => router.push("/login"));
+                setUser(data)
+                fetchChat()
+            });
     }, []);
 
     return (
         <>
-            {user ?
-                <div className={styles.container}>
-                    <div className={styles.user}>
-                        {user ? user.email : ""}
-                    </div>
-                    <div className={styles.chat}>
-                        {chatLogs ? chatLogs.map(async (message) => {
-                            const date = new Date(message.created_at);
-                            // const profile = await getProfile(message.profile_id);
-                            return (
-                                <div className={styles.chatLog} key={message.id}>
-                                    {/* <p>{profile[0].username}</p> */}
-                                    <p className={styles.chatLogText}>{message.text}</p>
-                                    <p className={styles.chatLogTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
-                                </div>
-                            )
-                        }) : ""}
-                        <div ref={scroll}></div>
-                    </div>
-                    <div className={styles.typeArea}>
-                        <form onSubmit={(event) => handleSubmit(event)}>
-                            <input type="text" placeholder="Type a message" ref={textbox} name="textbox" className={styles.input} autoComplete="false" />
-                            <button type="submit" className={styles.sendBtn}><FaArrowUp /></button>
-                        </form>
-                    </div>
-                    <button onClick={() => signOut()}>Sign Out</button>
+            <div className={styles.container}>
+                <div className={styles.chat}>
+                    {chatLogs ? chatLogs.map(async (message) => {
+                        const date = new Date(message.created_at);
+                        return (
+                            <div className={styles.chatLog} key={message.id}>
+                                <p>{message.profile.username}</p>
+                                <p className={styles.chatLogText}>{message.text}</p>
+                                <p className={styles.chatLogTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
+                            </div>
+                        )
+                    }) : ""}
+                    <div ref={scroll}></div>
                 </div>
-                : <Loading />}
+                <div className={styles.typeArea}>
+                    <form onSubmit={(event) => handleSubmit(event)}>
+                        <input type="text" placeholder="Type a message" ref={textbox} name="textbox" className={styles.input} autoComplete="false" />
+                        <button type="submit" className={styles.sendBtn}><FaArrowUp /></button>
+                    </form>
+                </div>
+                <button onClick={() => signOut()}>Sign Out</button>
+            </div>
         </>
     )
 }

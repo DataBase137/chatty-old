@@ -2,15 +2,13 @@
 
 import styles from "./page.module.css";
 import supabase from "../../utils/supabase"
-import { useRef, useState, useEffect } from "react";
-import Loading from "../loading";
+import { useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 const Page = () => {
     const email = useRef();
     const password = useRef();
     const username = useRef();
-    const [noUser, setNoUser] = useState(false);
     const router = useRouter();
 
     const handleSubmit = (event) => {
@@ -24,37 +22,33 @@ const Page = () => {
             password,
             options: {
                 data: {
-                    username,
-                    email
+                    username
                 },
                 emailRedirectTo: 'http://localhost:3000/chat/'
             }
         });
     }
 
-    const userPromise = new Promise(async (resolve, reject) => {
+    const getUser = async () => {
         const { data, error } = await supabase.auth.getUser();
-        if (error) resolve(); else reject();
-    });
+
+        if (!error) router.push("/chat")
+    }
 
     useEffect(() => {
-        userPromise
-            .then(() => setNoUser(true))
-            .catch(() => router.push("/chat"));
+        getUser()
     }, []);
 
     return (
         <>
-            {noUser ?
-                <div className={styles.container}>
-                    <form onSubmit={(event) => handleSubmit(event)}>
-                        <input type="email" placeholder="Email" ref={email} name="email" className={styles.email} />
-                        <input type="password" placeholder="Password" ref={password} name="password" minLength="6" className={styles.password} />
-                        <input type="text" placeholder="Username" ref={username} name="username" minLength="3" className={styles.username} />
-                        <button type="submit" className={styles.sendBtn}>Sign Up</button>
-                    </form>
-                </div>
-                : <Loading />}
+            <div className={styles.container}>
+                <form onSubmit={(event) => handleSubmit(event)}>
+                    <input type="email" placeholder="Email" ref={email} name="email" className={styles.email} />
+                    <input type="password" placeholder="Password" ref={password} name="password" minLength="6" className={styles.password} />
+                    <input type="text" placeholder="Username" ref={username} name="username" minLength="3" className={styles.username} />
+                    <button type="submit" className={styles.sendBtn}>Sign Up</button>
+                </form>
+            </div>
         </>
     );
 }

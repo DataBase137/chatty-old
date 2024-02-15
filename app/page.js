@@ -1,17 +1,15 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import styles from "./page.module.css";
 import Navbar from "./navbar";
 import { FaChevronDown } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import supabase from "../utils/supabase";
-import Loading from "./loading";
 
 const Page = () => {
   const router = useRouter();
   const scroll = useRef();
-  const [noUser, setNoUser] = useState(false);
   const typewriterElement = useRef();
 
   const TypeWriter = function (txtElement, words, wait = 5000) {
@@ -67,45 +65,41 @@ const Page = () => {
     }
   };
 
-  const userPromise = new Promise(async (resolve, reject) => {
+  const getUser = async () => {
     const { data, error } = await supabase.auth.getUser();
-    if (error) resolve(); else reject();
-  });
+
+    if (!error) router.push("/chat")
+  }
 
   useEffect(() => {
-    userPromise
-      .then(() => setNoUser(true))
-      .catch(() => router.push("/chat"));
-    init();
+    getUser()
+      .then(() => init());
   }, []);
 
   return (
     <>
-      {noUser ?
-        <div className={styles.container}>
-          <Navbar />
-          <div className={styles.downArrowContainer}>
-            <FaChevronDown className={styles.downArrow} onClick={() => { scroll.current.scrollIntoView(true) }} />
-          </div>
-          <div className={styles.topLeft}>
-            <div className={styles.topContent}>
-              <span className={styles.txtType} ref={typewriterElement} id="txt-type" data-wait="2000" data-words='["Connect", "Meet", "Talk"]'><span></span></span>
-              <p className={styles.slogan}>Contact <span>family</span>. Chat with <span>friends</span>. All with one click.</p>
-              <button className={styles.btn} onClick={() => router.push("/signup")}>Sign Up</button>
-            </div>
-          </div>
-          <div className={styles.topRight}>
-
-          </div>
-          <div className={styles.bottomLeft} ref={scroll}>
-
-          </div>
-          <div className={styles.bottomRight}>
-
+      <div className={styles.container}>
+        <Navbar />
+        <div className={styles.downArrowContainer}>
+          <FaChevronDown className={styles.downArrow} onClick={() => { scroll.current.scrollIntoView(true) }} />
+        </div>
+        <div className={styles.topLeft}>
+          <div className={styles.topContent}>
+            <span className={styles.txtType} ref={typewriterElement} id="txt-type" data-wait="2000" data-words='["Connect", "Meet", "Talk"]'><span></span></span>
+            <p className={styles.slogan}>Contact <span>family</span>. Chat with <span>friends</span>. All with one click.</p>
+            <button className={styles.btn} onClick={() => router.push("/signup")}>Sign Up</button>
           </div>
         </div>
-        : <Loading />
-      }
+        <div className={styles.topRight}>
+
+        </div>
+        <div className={styles.bottomLeft} ref={scroll}>
+
+        </div>
+        <div className={styles.bottomRight}>
+
+        </div>
+      </div>
     </>
   );
 }
