@@ -51,14 +51,14 @@
     font-family: "Nunito";
     font-weight: 900;
     font-size: 17px;
-    border-radius: 3px;
+    border-radius: 10px;
     background-color: var(--color-6);
     border: none;
     color: var(--dark-text);
     text-align: center;
     padding: 0 30px;
     cursor: pointer;
-    margin: 15px 0 15px 30px;
+    margin: 13px 0 13px 30px;
 }
 
 .joinBtn:hover {

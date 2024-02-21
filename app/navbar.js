@@ -2,7 +2,7 @@ import Link from "next/link";
 import styles from "./navbar.module.css";
 import { useRouter } from "next/navigation";
 
-const Navbar = () => {
+const Navbar = ({type}) => {
     const router = useRouter();
     
     return (
@@ -10,11 +10,11 @@ const Navbar = () => {
             <h1 className={styles.logo}><Link href="/">chatty</Link></h1>
             <div className={styles.links}>
                 <ul>
-                    <li><Link href="/chat">Chat</Link></li>
+                    <li><Link href="#">Info</Link></li>
                     <li><Link href="#">Features</Link></li>
                     <li><Link href="#">Privacy</Link></li>
                 </ul>
-                <button className={styles.joinBtn} onClick={() => router.push("/login")}>Log In</button>
+                {type === "home" && <button className={styles.joinBtn} onClick={() => router.push("/login")}>Log In</button>}
             </div>
         </nav>
     );

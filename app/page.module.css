@@ -5,7 +5,7 @@
 }
 
 .txtType {
-    font-family: "Raleway", sans-serif;
+    font-family: "Nunito";
     font-size: 4rem;
     font-variant: small-caps;
     font-weight: 500;
@@ -56,9 +56,9 @@
 }
 
 .slogan {
-    font-family: "Martel Sans", sans-serif;
+    font-family: "Poppins";
     font-size: 23px;
-    font-weight: 700;
+    font-weight: 500;
     padding: 13px 0;
     color: var(--light-text);
 }
@@ -72,12 +72,12 @@
     font-weight: 700;
     line-height: 130%;
     font-size: 17px;
-    border-radius: 3px;
+    border-radius: 10px;
     background-color: var(--color-3);
     border: none;
     color: var(--dark-text);
     text-align: center;
-    padding: 12px 30px;
+    padding: 16px 30px;
     cursor: pointer;
     width: 127px;
 }

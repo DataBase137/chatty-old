@@ -4,6 +4,7 @@ import styles from "./page.module.css";
 import supabase from "../../utils/supabase"
 import { useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Navbar from "../navbar";
 
 const Page = () => {
     const email = useRef();
@@ -42,12 +43,21 @@ const Page = () => {
     return (
         <>
             <div className={styles.container}>
-                <form onSubmit={(event) => handleSubmit(event)}>
-                    <input type="email" placeholder="Email" ref={email} name="email" className={styles.email} />
-                    <input type="password" placeholder="Password" ref={password} name="password" minLength="6" className={styles.password} />
-                    <input type="text" placeholder="Username" ref={username} name="username" minLength="3" className={styles.username} />
-                    <button type="submit" className={styles.sendBtn}>Sign Up</button>
-                </form>
+                <Navbar type="signup" />
+                <div className={styles.left}>
+
+                </div>
+                <div className={styles.right}>
+                    <div className={styles.module}>
+                        <form className={styles.form} onSubmit={(event) => handleSubmit(event)}>
+                            <input type="email" placeholder="Email" ref={email} name="email" className={styles.input} />
+                            <input type="password" placeholder="Password" ref={password} name="password" minLength="6" className={styles.input} />
+                            <input type="text" placeholder="Username" ref={username} name="username" minLength="3" className={styles.input} />
+                            <button type="submit" className={styles.sendBtn}>Sign Up</button>
+                        </form>
+                        <p className={styles.redirect}>Already a user? <a onClick={() => { router.push("/login") }}>Log In</a></p>
+                    </div>
+                </div>
             </div>
         </>
     );

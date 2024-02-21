@@ -79,7 +79,7 @@ const Page = () => {
   return (
     <>
       <div className={styles.container}>
-        <Navbar />
+        <Navbar type="home" />
         <div className={styles.downArrowContainer}>
           <FaChevronDown className={styles.downArrow} onClick={() => { scroll.current.scrollIntoView(true) }} />
         </div>
