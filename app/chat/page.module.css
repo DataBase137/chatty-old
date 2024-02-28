@@ -6,15 +6,19 @@
 
 .container {
     background-color: var(--light-bg);
+    height: 100vh;
+    margin-left: 60px;
+    display: flex;
+    flex-direction: column;
 }
 
 .chat {
-    margin: 0 22%;
-    height: 96vh;
-    overflow-x: hidden;
+    height: inherit;
+    overflow-x: scroll;
+    padding: 0 10px;
 }
 
-.chatLog {
+.message {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -22,42 +26,45 @@
     color: var(--light-text);
 }
 
-.chatLogTime {
+.messageTime {
     font-size: 8pt;
 }
 
-.chatLogText {
+.messageText {
     max-width: 620px;
+}
+
+.messageUser {
+    font-size: 8pt;
 }
 
 .typeArea {
     display: flex;
-    width: 100%;
+    padding: 10px 0;
     justify-content: center;
-    height: 4vh;
-    background-color: var(--light-bg);
 }
 
 .input {
-    height: 26px;
+    height: 30px;
     width: 60vw;
     font-size: 12pt;
     border: none;
-    border-radius: 50px;
+    border-radius: 10px;
     padding-left: 10px;
-    background-color: var(--light-bg);
+    background-color: #ebebeb;
     color: var(--light-text);
 }
 
 .sendBtn {
-    height: 26px;
-    width: 26px;
-    background-color: var(--light-bg);
+    height: 32px;
+    width: 32px;
+    background-color: #ebebeb;
     color: var(--light-text);
     border: none;
-    border-radius: 50%;
-    margin-left: -27px;
+    border-radius: 10px;
+    margin-left: -28px;
     margin-bottom: 1px;
+    font-size: 1rem;
 }
 
 .sendBtn:hover {

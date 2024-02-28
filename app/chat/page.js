@@ -2,19 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import styles from "./page.module.css"
-import { FaArrowUp } from "react-icons/fa"
 import supabase from "../../utils/supabase";
 import { useRouter } from "next/navigation";
 import sendMessage from "../../utils/sendmessage";
-import getMessages from "../../utils/getmessages";
+import Sidebar from "./sidebar";
+import { FaArrowUp } from "react-icons/fa";
 
 const Page = () => {
     const textbox = useRef();
     const scroll = useRef();
-    const [chatLogs, setChatLogs] = useState(null);
+    const [messages, setMessages] = useState(null);
     const [user, setUser] = useState(false);
     const router = useRouter();
-
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -24,34 +23,30 @@ const Page = () => {
         }
     }
 
-    const channel = supabase.channel('chat-log-changes')
+    const channel = supabase.channel('message-changes')
         .on(
             'postgres_changes',
             { event: '*', schema: 'public', table: 'messages' },
             (payload) => {
                 if (payload.eventType === "INSERT") {
-                    setChatLogs((current) => [...current, payload.new]);
+                    setMessages((current) => [...current, payload.new]);
                 }
             }
         )
         .subscribe()
 
     const fetchChat = async () => {
-        const chat = await getMessages();
-        setChatLogs(chat);
+        const { data, error } = await supabase
+            .from('messages')
+            .select('*, profile: profiles(username)');
+        setMessages(data);
     }
 
     useEffect(() => {
         if (scroll.current) {
             scroll.current.scrollIntoView(true);
         }
-    }, [chatLogs]);
-
-    const signOut = async () => {
-        const { error } = await supabase.auth.signOut({ scope: 'local' });
-
-        if (error) console.error(error); else router.push("/login");
-    }
+    }, [messages]);
 
     const getUser = async () => {
         const { data, error } = await supabase.auth.getUser();
@@ -69,27 +64,29 @@ const Page = () => {
 
     return (
         <>
+            <Sidebar />
             <div className={styles.container}>
                 <div className={styles.chat}>
-                    {chatLogs ? chatLogs.map(async (message) => {
+                    {messages ? messages.map((message) => {
                         const date = new Date(message.created_at);
                         return (
-                            <div className={styles.chatLog} key={message.id}>
-                                <p>{message.profile.username}</p>
-                                <p className={styles.chatLogText}>{message.text}</p>
-                                <p className={styles.chatLogTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
+                            <div className={styles.message} key={message.id}>
+                                <div className={styles.messageLeft}>
+                                    {/* <p className={styles.messageUser}>{message.profile.username}</p> */}
+                                    <p className={styles.messageText}>{message.text}</p>
+                                </div>
+                                <p className={styles.messageTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
                             </div>
                         )
                     }) : ""}
-                    <div ref={scroll}></div>
+                    <div className={styles.scroll} ref={scroll}></div>
                 </div>
                 <div className={styles.typeArea}>
-                    <form onSubmit={(event) => handleSubmit(event)}>
-                        <input type="text" placeholder="Type a message" ref={textbox} name="textbox" className={styles.input} autoComplete="false" />
+                    <form onSubmit={(event) => handleSubmit(event)} autoComplete="off">
+                        <input type="text" placeholder="Type a message" ref={textbox} name="textbox" className={styles.input} />
                         <button type="submit" className={styles.sendBtn}><FaArrowUp /></button>
                     </form>
                 </div>
-                <button onClick={() => signOut()}>Sign Out</button>
             </div>
         </>
     )

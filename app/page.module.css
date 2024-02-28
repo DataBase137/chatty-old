@@ -94,7 +94,6 @@
     font-size: 40px;
     bottom: 10%;
     animation: bounce 2s ease infinite;
-    z-index: 1000;
     color: var(--light-text);
 }
 
