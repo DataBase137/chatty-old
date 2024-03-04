@@ -5,7 +5,6 @@ import styles from "./page.module.css";
 import Navbar from "./navbar";
 import { FaChevronDown } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import supabase from "../utils/supabase";
 
 const Page = () => {
   const router = useRouter();
@@ -65,15 +64,8 @@ const Page = () => {
     }
   };
 
-  const getUser = async () => {
-    const { data, error } = await supabase.auth.getUser();
-
-    if (!error) router.push("/chat")
-  }
-
   useEffect(() => {
-    getUser()
-      .then(() => init());
+      init();
   }, []);
 
   return (

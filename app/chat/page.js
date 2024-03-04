@@ -2,13 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import styles from "./page.module.css"
-import supabase from "../../utils/supabase";
 import { useRouter } from "next/navigation";
 import sendMessage from "../../utils/sendmessage";
 import Sidebar from "./sidebar";
 import { FaArrowUp } from "react-icons/fa";
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 const Page = () => {
+    const supabase = createClientComponentClient();
     const textbox = useRef();
     const scroll = useRef();
     const [messages, setMessages] = useState(null);
@@ -51,7 +52,7 @@ const Page = () => {
     const getUser = async () => {
         const { data, error } = await supabase.auth.getUser();
 
-        if (error) router.push("/login"); else return data;
+        if (data.success) return data.data; else router.push("/login");
     }
 
     useEffect(() => {

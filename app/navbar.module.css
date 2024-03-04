@@ -13,7 +13,7 @@
 .logo {
     font-size: 1.2rem;
     margin: 1rem;
-    font-weight: 900;
+    font-weight: 800;
 }
 
 .logo a {
@@ -38,7 +38,7 @@
     color: var(--light-text);
     padding: 1.6rem 1rem;
     display: block;
-    font-weight: 900;
+    font-weight: 800;
 }
 
 .links a:hover {
@@ -47,8 +47,8 @@
 
 .joinBtn {
     font-family: "Nunito";
-    font-weight: 900;
-    font-size: 17px;
+    font-weight: 700;
+    font-size: 1.1rem;
     border-radius: 10px;
     background-color: var(--color-6);
     border: none;
