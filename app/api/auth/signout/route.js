@@ -6,18 +6,16 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request) {
     const requestUrl = new URL(request.url);
-    const formData = await request.formData();
-    const email = formData.get('email');
-    const password = formData.get('password');
     const cookieStore = cookies();
     const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
 
-    await supabase.auth.signInWithPassword({
-        email,
-        password,
-    });
+    const { data: { user }, } = await supabase.auth.getUser();
 
-    return NextResponse.redirect(requestUrl.origin, {
+    if (user) {
+        await supabase.auth.signOut({ "scope": "local" });
+    }
+
+    return NextResponse.redirect(`${requestUrl.origin}/login`, {
         status: 301,
     });
 }

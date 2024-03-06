@@ -16,10 +16,10 @@ const Page = () => {
                 </div>
                 <div className={styles.right}>
                     <div className={styles.module}>
-                        <form className={styles.form} action="/auth/login" method="post">
+                        <form className={styles.form} action="/api/auth/login" method="post">
                             <input type="email" placeholder="Email" name="email" className={styles.input} autoComplete="email" />
                             <input type="password" placeholder="Password" name="password" minLength="6" className={styles.input} autoComplete="current-password" />
-                            <button type="submit" formAction="/auth/login" className={styles.sendBtn}>Log In</button>
+                            <button type="submit" formAction="/api/auth/login" className={styles.sendBtn}>Log In</button>
                         </form>
                         <p className={styles.redirect}>Not a user yet? <a onClick={() => { router.push("/signup") }}>Sign Up</a></p>
                     </div>

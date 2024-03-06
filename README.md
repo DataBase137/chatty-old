@@ -6,9 +6,10 @@
 - Separate chats with people
 - Group chats
 - Profiles in chat area
+- Log in with other providers
 
 # Things to redo/update
-- Signup/login page styles
+- Verify page styles
 
 # Known bugs/Things to Fix:
-- Chat page loading before it realizes to redirect to login (generally loading not working)
+- Need an verification email resend button

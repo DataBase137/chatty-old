@@ -9,22 +9,15 @@ export async function POST(request) {
     const formData = await request.formData();
     const email = formData.get('email');
     const password = formData.get('password');
-    const username = formData.get('username');
     const cookieStore = cookies();
     const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
 
-    await supabase.auth.signUp({
+    await supabase.auth.signInWithPassword({
         email,
         password,
-        options: {
-            data: {
-                username
-            },
-            emailRedirectTo: `${requestUrl.origin}/auth/callback`,
-        },
     });
 
-    return NextResponse.redirect(requestUrl.origin, {
+    return NextResponse.redirect(`${requestUrl.origin}/api/auth/callback`, {
         status: 301,
     });
 }

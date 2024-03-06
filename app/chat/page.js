@@ -1,20 +1,42 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import styles from "./page.module.css"
-import { useRouter } from "next/navigation";
-import sendMessage from "../../utils/sendmessage";
 import Sidebar from "./sidebar";
 import { FaArrowUp } from "react-icons/fa";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const Page = () => {
     const supabase = createClientComponentClient();
     const textbox = useRef();
     const scroll = useRef();
     const [messages, setMessages] = useState(null);
-    const [user, setUser] = useState(false);
-    const router = useRouter();
+    const [username, setUsername] = useState(null);
+    const [avatarUrl, setAvatarUrl] = useState(null);
+    const [user, setUser] = useState(null);
+
+    // const getProfile = useCallback(async () => {
+    const getProfile = async () => {
+        "use server";
+
+        const { data: user } = await supabase.auth.getUser();
+
+        setUser(user);
+
+        const { data: profile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', user?.id)
+            .single();
+
+        setUsername(profile.username);
+        setAvatarUrl(profile.avatar_url);
+        // }, [supabase]);
+    };
+
+    const sendMessage = (message) => {
+        console.log(message);
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -24,44 +46,52 @@ const Page = () => {
         }
     }
 
-    const channel = supabase.channel('message-changes')
-        .on(
-            'postgres_changes',
-            { event: '*', schema: 'public', table: 'messages' },
-            (payload) => {
+    const fetchChat = useCallback(async () => {
+        try {
+            const { data, error, status } = await supabase
+                .from('messages')
+                .select('*, profile: profiles(username)');
+
+            if (error && status !== 406) {
+                throw error;
+            }
+
+            if (data) {
+                setMessages(data);
+            }
+        } catch (error) {
+            console.log("Error loading messages");
+        }
+    }, [supabase])
+
+    useEffect(() => {
+        getProfile();
+        fetchChat();
+    }, [])
+
+    useEffect(() => {
+        const channel = supabase.channel('message-changes')
+            .on('postgres_changes', {
+                event: '*',
+                schema: 'public',
+                table: 'messages'
+            }, (payload) => {
                 if (payload.eventType === "INSERT") {
                     setMessages((current) => [...current, payload.new]);
                 }
-            }
-        )
-        .subscribe()
+            })
+            .subscribe();
 
-    const fetchChat = async () => {
-        const { data, error } = await supabase
-            .from('messages')
-            .select('*, profile: profiles(username)');
-        setMessages(data);
-    }
+        return () => {
+            supabase.removeChannel(channel);
+        }
+    }, [supabase]);
 
     useEffect(() => {
         if (scroll.current) {
             scroll.current.scrollIntoView(true);
         }
     }, [messages]);
-
-    const getUser = async () => {
-        const { data, error } = await supabase.auth.getUser();
-
-        if (data.success) return data.data; else router.push("/login");
-    }
-
-    useEffect(() => {
-        getUser()
-            .then((data) => {
-                setUser(data)
-                fetchChat()
-            });
-    }, []);
 
     return (
         <>

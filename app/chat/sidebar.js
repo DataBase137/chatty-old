@@ -12,7 +12,7 @@ const Sidebar = () => {
                     <button><FaUsers className={styles.icon} /></button>
                 </div>
                 <div className={styles.bottom}>
-                    <button className={styles.signOut} onClick={() => signOut()}><FaUser className={styles.icon} /></button>
+                    <button className={styles.signOut} formAction="/api/auth/signout"><FaUser className={styles.icon} /></button>
                 </div>
             </div>
         </>
