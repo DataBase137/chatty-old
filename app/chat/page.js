@@ -15,9 +15,7 @@ const Page = () => {
     const [avatarUrl, setAvatarUrl] = useState(null);
     const [user, setUser] = useState(null);
 
-    // const getProfile = useCallback(async () => {
-    const getProfile = async () => {
-        "use server";
+    const getProfile = useCallback(async () => {
 
         const { data: user } = await supabase.auth.getUser();
 
@@ -25,17 +23,19 @@ const Page = () => {
 
         const { data: profile } = await supabase
             .from('profiles')
-            .select('*')
-            .eq('id', user?.id)
+            .select('username, avatar_url')
+            .eq('id', user?.user.id)
             .single();
 
         setUsername(profile.username);
         setAvatarUrl(profile.avatar_url);
-        // }, [supabase]);
-    };
+    }, [supabase]);
 
-    const sendMessage = (message) => {
-        console.log(message);
+    const sendMessage = async (message) => {
+        await fetch("http://localhost:3000/api/messages", {
+            method: 'POST',
+            body: JSON.stringify({ message }),
+        });
     }
 
     const handleSubmit = (event) => {
@@ -46,28 +46,19 @@ const Page = () => {
         }
     }
 
-    const fetchChat = useCallback(async () => {
-        try {
-            const { data, error, status } = await supabase
-                .from('messages')
-                .select('*, profile: profiles(username)');
+    const getMessages = useCallback(async () => {
+        const { data } = await supabase
+            .from('messages')
+            .select('*, profile: profiles(username)')
+            .order('created_at');
 
-            if (error && status !== 406) {
-                throw error;
-            }
-
-            if (data) {
-                setMessages(data);
-            }
-        } catch (error) {
-            console.log("Error loading messages");
-        }
-    }, [supabase])
+        setMessages(data);
+    }, [supabase]);
 
     useEffect(() => {
         getProfile();
-        fetchChat();
-    }, [])
+        getMessages();
+    }, []);
 
     useEffect(() => {
         const channel = supabase.channel('message-changes')
@@ -108,7 +99,7 @@ const Page = () => {
                                 </div>
                                 <p className={styles.messageTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
                             </div>
-                        )
+                        );
                     }) : ""}
                     <div className={styles.scroll} ref={scroll}></div>
                 </div>
