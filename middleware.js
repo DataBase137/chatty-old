@@ -38,5 +38,7 @@ export async function middleware(req) {
 }
 
 export const config = {
-    matcher: ['/', '/chat', '/login'],
+    matcher: [
+        '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    ],
 }

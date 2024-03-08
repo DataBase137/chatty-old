@@ -5,11 +5,11 @@ import styles from "./page.module.css"
 import Sidebar from "./sidebar";
 import { FaArrowUp } from "react-icons/fa";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import Chats from "./chats";
 
 const Page = () => {
     const supabase = createClientComponentClient();
-    const textbox = useRef();
-    const scroll = useRef();
+    const chat = useRef();
     const [messages, setMessages] = useState(null);
     const [username, setUsername] = useState(null);
     const [avatarUrl, setAvatarUrl] = useState(null);
@@ -31,25 +31,10 @@ const Page = () => {
         setAvatarUrl(profile.avatar_url);
     }, [supabase]);
 
-    const sendMessage = async (message) => {
-        await fetch("http://localhost:3000/api/messages", {
-            method: 'POST',
-            body: JSON.stringify({ message }),
-        });
-    }
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        if (textbox.current.value) {
-            sendMessage(textbox.current.value);
-            textbox.current.value = "";
-        }
-    }
-
     const getMessages = useCallback(async () => {
         const { data } = await supabase
             .from('messages')
-            .select('*, profile: profiles(username)')
+            .select('*, profile: profiles(*)')
             .order('created_at');
 
         setMessages(data);
@@ -79,33 +64,47 @@ const Page = () => {
     }, [supabase]);
 
     useEffect(() => {
-        if (scroll.current) {
-            scroll.current.scrollIntoView(true);
-        }
+        chat.current.scrollTop = chat.current.scrollHeight;
     }, [messages]);
+
+    const sendMessage = async (event) => {
+        event.preventDefault();
+
+        const message = event.target[0].value;
+        event.target.reset();
+
+        await supabase
+            .from('messages')
+            .insert([
+                {
+                    text: message,
+                    chat_id: '014e327e-0050-4301-91c5-275b4a9aa807',
+                },
+            ]);
+    }
 
     return (
         <>
+            <Chats />
             <Sidebar />
             <div className={styles.container}>
-                <div className={styles.chat}>
+                <div className={styles.chat} ref={chat}>
                     {messages ? messages.map((message) => {
                         const date = new Date(message.created_at);
                         return (
                             <div className={styles.message} key={message.id}>
                                 <div className={styles.messageLeft}>
-                                    {/* <p className={styles.messageUser}>{message.profile.username}</p> */}
+                                    <p className={styles.messageUser}>{message.profile?.username}</p>
                                     <p className={styles.messageText}>{message.text}</p>
                                 </div>
                                 <p className={styles.messageTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
                             </div>
                         );
                     }) : ""}
-                    <div className={styles.scroll} ref={scroll}></div>
                 </div>
                 <div className={styles.typeArea}>
-                    <form onSubmit={(event) => handleSubmit(event)} autoComplete="off">
-                        <input type="text" placeholder="Type a message" ref={textbox} name="textbox" className={styles.input} />
+                    <form onSubmit={(event) => sendMessage(event)} autoComplete="off">
+                        <input type="text" placeholder="Type a message" name="textbox" className={styles.input} />
                         <button type="submit" className={styles.sendBtn}><FaArrowUp /></button>
                     </form>
                 </div>

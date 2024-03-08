@@ -7,7 +7,7 @@
 .container {
     background-color: var(--light-bg);
     height: 100vh;
-    margin-left: 60px;
+    margin-left: 260px;
     display: flex;
     flex-direction: column;
 }
