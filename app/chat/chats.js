@@ -3,11 +3,11 @@
 import { FaPlus } from "react-icons/fa";
 import styles from "./chats.module.css";
 import { useEffect, useState } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
 
-const Chats = () => {
+const Chats = ({ chatId, supabase }) => {
     const [chats, setChats] = useState();
-    const supabase = createClientComponentClient();
+    const router = useRouter();
 
     const createChat = async (name) => {
         await supabase
@@ -42,16 +42,28 @@ const Chats = () => {
                 <div className={styles.chats}>
                     {chats ? chats.map((chat) => {
                         const date = new Date(chat.created_at);
-                        return (
-                            <div className={styles.chat} key={chat.id}>
-                                <p className={styles.chatName}>{chat.name}</p>
-                                {/* {date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} */}
-                                <p className={styles.chatTime}>{date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
-                            </div>
-                        );
+
+                        if (chatId === chat.id) {
+                            return (
+                                // <div onClick={() => router.push(`/chat/${chat.id}`)} className={styles.chat} key={chat.id}>
+                                < div className={`${styles.chat} ${styles.chatSelected}`} key={chat.id} >
+                                    <p className={styles.chatName}>{chat.name}</p>
+                                    {/* {date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} */}
+                                    < p className={styles.chatTime} > {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
+                                </div>
+                            );
+                        } else {
+                            return (
+                                <div onClick={() => router.push(`/chat/${chat.id}`)} className={styles.chat} key={chat.id}>
+                                    <p className={styles.chatName}>{chat.name}</p>
+                                    {/* {date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} */}
+                                    < p className={styles.chatTime} > {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
+                                </div>
+                            );
+                        }
                     }) : ""}
-                </div>
-            </div>
+                </div >
+            </div >
         </>
     );
 }

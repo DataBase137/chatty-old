@@ -14,7 +14,7 @@
     display: flex;
     height: 8vh;
     align-items: center;
-    box-shadow: 0 5px 3px -3px rgba(52, 52, 53, 0.05);
+    /* box-shadow: 0 5px 3px -3px rgba(52, 52, 53, 0.05); */
     justify-content: space-between;
     padding: 0 15px;
 }
@@ -38,4 +38,33 @@
 .icon {
     font-size: 1.5rem;
     color: var(--color-8-4);
+}
+
+.chat {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 7px;
+    padding: 0 5px;
+    border-radius: 8px;
+    font-family: "Nunito";
+    align-items: center;
+}
+
+.chatName {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.chatTime {
+    font-weight: 300;
+    font-size: 0.8rem;
+}
+
+.chat:hover {
+    background-color: #ebebeb;
+    cursor: pointer;
+}
+
+.chatSelected {
+    background-color: #ddd;
 }

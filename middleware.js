@@ -30,8 +30,12 @@ export async function middleware(req) {
         return NextResponse.redirect(new URL('/chat', req.url));
     }
 
-    if (!user && req.nextUrl.pathname === '/chat') {
+    if (!user && req.nextUrl.pathname.startsWith('/chat')) {
         return NextResponse.redirect(new URL('/login', req.url));
+    }
+
+    if (user && req.nextUrl.pathname.startsWith('/chat/')) {
+        return NextResponse.rewrite(new URL('/chat', req.url));
     }
 
     return NextResponse.next();
