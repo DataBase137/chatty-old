@@ -4,51 +4,93 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import styles from "./messages.module.css"
 import { FaArrowUp } from "react-icons/fa";
 
+const Message = ({ message, profile, setProfileCache }) => {
+    const date = new Date(message.created_at);
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            const { data } = await supabase
+                .from('profiles')
+                .select('*')
+                .match({ id: message.profile_id })
+                .single();
+
+            if (data) {
+                setProfileCache((current) => ({
+                    ...current,
+                    [data.id]: data,
+                }))
+            }
+
+        }
+        if (!profile) {
+            fetchProfile();
+        }
+    }, [profile, message.profile_id]);
+
+    return (
+        <div className={styles.message}>
+            <div className={styles.messageLeft}>
+                <p className={styles.messageUser}>{profile.username}</p>
+                <p className={styles.messageText}>{message.text}</p>
+            </div>
+            <p className={styles.messageTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
+        </div>
+    );
+}
+
 const Messages = ({ chatId, supabase, user }) => {
     const chat = useRef();
     const [messages, setMessages] = useState(null);
+    const [profileCache, setProfileCache] = useState({});
 
     const getMessages = useCallback(async (id) => {
         const { data } = await supabase
             .from('messages')
             .select('*, profile: profiles(*)')
-            .order('created_at')
-            .eq('chat_id', id);
+            .match({ chat_id: id })
+            .order('created_at');
+
+        const newProfiles = Object.fromEntries(
+            data
+                .map((message) => message.profile)
+                .filter(Boolean)
+                .map((profile) => [profile.id, profile])
+        );
+
+        setProfileCache((current) => ({
+            ...current,
+            ...newProfiles,
+        }));
 
         setMessages(data);
     }, [supabase]);
 
     useEffect(() => {
-        console.log(chatId);
         getMessages(chatId);
     }, [chatId]);
 
     useEffect(() => {
         const channel = supabase.channel('message-changes')
             .on('postgres_changes', {
-                event: '*',
+                event: 'INSERT',
                 schema: 'public',
-                table: 'messages'
+                table: 'messages',
+                filter: `chat_id=eq.${chatId}`
             }, (payload) => {
-                if (payload.eventType === "INSERT") {
-                    setMessages((current) => [...current, payload.new]);
-                }
+                setMessages((current) => [...current, payload.new]);
             })
             .subscribe();
 
         return () => {
             supabase.removeChannel(channel);
         }
-    }, [supabase]);
-
-    useEffect(() => {
-        chat.current.scrollTop = chat.current.scrollHeight;
-    }, [messages]);
+    }, [supabase, chatId]);
 
     const sendMessage = async (event) => {
         event.preventDefault();
-
         const message = event.target[0].value;
+
         if (message) {
             event.target.reset();
 
@@ -60,27 +102,26 @@ const Messages = ({ chatId, supabase, user }) => {
                         chat_id: chatId,
                     },
                 ]);
-        } else {
-            alert("no data");
         }
     }
+
+    useEffect(() => {
+        chat.current.scrollTop = chat.current.scrollHeight;
+    }, [messages]);
 
     return (
         <>
             <div className={styles.container}>
                 <div className={styles.chat} ref={chat}>
-                    {messages ? messages.map((message) => {
-                        const date = new Date(message.created_at);
-                        return (
-                            <div className={styles.message} key={message.id}>
-                                <div className={styles.messageLeft}>
-                                    <p className={styles.messageUser}>{message.profile?.username}</p>
-                                    <p className={styles.messageText}>{message.text}</p>
-                                </div>
-                                <p className={styles.messageTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
-                            </div>
-                        );
-                    }) : ""}
+                    {messages ? messages.map((message) => (
+                        <Message
+                            key={message.id}
+                            message={message}
+                            profile={profileCache[message.profile_id]}
+                            setProfileCache={setProfileCache}
+                        />
+                    )
+                    ) : ""}
                 </div>
                 <div className={styles.typeArea}>
                     <form onSubmit={(event) => sendMessage(event)} autoComplete="off">

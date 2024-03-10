@@ -45,10 +45,8 @@ const Chats = ({ chatId, supabase }) => {
 
                         if (chatId === chat.id) {
                             return (
-                                // <div onClick={() => router.push(`/chat/${chat.id}`)} className={styles.chat} key={chat.id}>
                                 < div className={`${styles.chat} ${styles.chatSelected}`} key={chat.id} >
                                     <p className={styles.chatName}>{chat.name}</p>
-                                    {/* {date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} */}
                                     < p className={styles.chatTime} > {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
                                 </div>
                             );
@@ -56,7 +54,6 @@ const Chats = ({ chatId, supabase }) => {
                             return (
                                 <div onClick={() => router.push(`/chat/${chat.id}`)} className={styles.chat} key={chat.id}>
                                     <p className={styles.chatName}>{chat.name}</p>
-                                    {/* {date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} */}
                                     < p className={styles.chatTime} > {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
                                 </div>
                             );
