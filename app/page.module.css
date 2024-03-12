@@ -1,7 +1,35 @@
 .container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 50%);
     background: var(--light-bg);
+}
+
+@media (min-width: 1300px) {
+    .container {
+        grid-template-columns: repeat(auto-fill, 50%);
+    }
+}
+
+@media (max-width: 1300px) {
+    .topRight {
+        display: none !important;
+    }
+
+    .topContent {
+        margin: 0 50px;
+    }
+}
+
+@media (max-width: 600px) {
+    .topContent {
+        margin: 0 70px;
+    }
+}
+
+/* Sides weird at less than 1300px, 650px weird again, 565px log in button gets weird, lets just say 600 for full mobile layout */
+
+.topContent {
+    display: flex;
+    flex-direction: column;
 }
 
 .txtType {
@@ -29,6 +57,10 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+
+@media (min-width: 1300px) {
+    
 }
 
 .topRight {
@@ -78,13 +110,13 @@
     color: var(--dark-text);
     text-align: center;
     padding: 16px 30px;
-    cursor: pointer;
     width: 127px;
 }
 
-/* .btn:hover {
-    background-color: var(--color-3-2);
-} */
+.btn:hover {
+    cursor: pointer;
+    background-color: var(--new-color-1-2);
+}
 
 .downArrowContainer {
     position: absolute;
@@ -95,7 +127,7 @@
     bottom: 10%;
     animation: bounce 2s ease infinite;
     color: var(--light-text);
-    z-index: 1;
+    z-index: 4;
 }
 
 .downArrow {
@@ -122,12 +154,12 @@
 
 .divide {
     position: absolute;
-    bottom: -1%;
+    bottom: 0;
     fill: var(--new-color-3);
 }
 
 .divide2 {
     position: absolute;
-    top: 100%;
+    top: 99.99%;
     fill: var(--new-color-3);
 }
