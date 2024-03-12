@@ -11,6 +11,6 @@
 
 # Known bugs/Things to Fix:
 - Need an verification email resend button
-- Channel messages don't contain profiles
-- You are still able to go to /chat and it messes up things
+- Need to add redirect to most recent chat from /chat 
 - Chat times are from when they are created, need to set up last message time
+- Fix whitelisted only emails

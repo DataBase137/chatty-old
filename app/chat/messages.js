@@ -53,7 +53,7 @@ const Messages = ({ chatId, supabase, user }) => {
 
         const newProfiles = Object.fromEntries(
             data
-                .map((message) => message.profile)
+                ?.map((message) => message.profile)
                 .filter(Boolean)
                 .map((profile) => [profile.id, profile])
         );

@@ -64,7 +64,7 @@
 }
 
 .slogan span {
-    color: var(--color-4-2);
+    color: var(--new-color-5);
 }
 
 .btn {
@@ -73,7 +73,7 @@
     line-height: 130%;
     font-size: 1.1rem;
     border-radius: 10px;
-    background-color: var(--color-3);
+    background-color: var(--new-color-1);
     border: none;
     color: var(--dark-text);
     text-align: center;
@@ -82,9 +82,9 @@
     width: 127px;
 }
 
-.btn:hover {
+/* .btn:hover {
     background-color: var(--color-3-2);
-}
+} */
 
 .downArrowContainer {
     position: absolute;
@@ -95,6 +95,7 @@
     bottom: 10%;
     animation: bounce 2s ease infinite;
     color: var(--light-text);
+    z-index: 1;
 }
 
 .downArrow {
@@ -113,4 +114,20 @@
     100% {
         transform: translateY(0);
     }
+}
+
+.mask {
+    mask-type: luminance;
+}
+
+.divide {
+    position: absolute;
+    bottom: -1%;
+    fill: var(--new-color-3);
+}
+
+.divide2 {
+    position: absolute;
+    top: 100%;
+    fill: var(--new-color-3);
 }
