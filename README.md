@@ -13,6 +13,6 @@
 
 # Known bugs/Things to Fix:
 - Need an verification email resend button
-- Need to add redirect to most recent chat from /chat
+- Need to add redirect to most recent chat from /chat and/or redo of url system
 - Chat times are from when they are created, need to set up last message time
 - Fix whitelisted only emails

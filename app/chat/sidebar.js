@@ -15,7 +15,9 @@ const Sidebar = () => {
                     <button><FaUsers className={styles.icon} /></button>
                 </div>
                 <div className={styles.bottom}>
-                    <button className={styles.signOut} onClick={() => router.push("/api/auth/signout")}><FaUser className={styles.icon} /></button>
+                    <form action="/api/auth/signout" method="post">
+                        <button type="submit" formAction="/api/auth/signout" className={styles.signOut}><FaUser className={styles.icon} /></button>
+                    </form>
                 </div>
             </div>
         </>
