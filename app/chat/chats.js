@@ -36,7 +36,7 @@ const Chats = ({ chatId, supabase }) => {
         <>
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <h1>Chats</h1>
+                    <h1>Messages</h1>
                     <button onClick={() => { createChat() }}><FaPlus className={styles.icon} /></button>
                 </div>
                 <div className={styles.chats}>
@@ -45,9 +45,9 @@ const Chats = ({ chatId, supabase }) => {
 
                         if (chatId === chat.id) {
                             return (
-                                < div className={`${styles.chat} ${styles.chatSelected}`} key={chat.id} >
+                                <div className={`${styles.chat} ${styles.chatSelected}`} key={chat.id} >
                                     <p className={styles.chatName}>{chat.name}</p>
-                                    < p className={styles.chatTime} > {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
+                                    <p className={styles.chatTime} > {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
                                 </div>
                             );
                         } else {

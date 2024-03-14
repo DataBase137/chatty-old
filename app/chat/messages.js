@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import styles from "./messages.module.css"
-import { FaArrowUp } from "react-icons/fa";
+import { FaRegPaperPlane } from "react-icons/fa";
 
-const Message = ({ message, profile, setProfileCache }) => {
+const Message = ({ message, profile, setProfileCache, user }) => {
     const date = new Date(message.created_at);
 
     useEffect(() => {
@@ -23,19 +23,35 @@ const Message = ({ message, profile, setProfileCache }) => {
             }
 
         }
+        
         if (!profile) {
             fetchProfile();
         }
     }, [profile, message.profile_id]);
 
     return (
-        <div className={styles.message}>
-            <div className={styles.messageLeft}>
-                <p className={styles.messageUser}>{profile.username}</p>
-                <p className={styles.messageText}>{message.text}</p>
+        <>        
+        {profile.id === user.user.id ? 
+            <div className={`${styles.message} ${styles.messageRight}`}>
+                <div className={styles.messageContent}>
+                    <p className={styles.messageUser}>{profile.username}</p>
+                    <div>
+                        <p className={styles.messageTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
+                        <p className={styles.messageText}>{message.text}</p>
+                    </div>
+                </div>
+            </div> :
+            <div className={`${styles.message} ${styles.messageLeft}`}>
+                <div className={styles.messageContent}>
+                    <p className={styles.messageUser}>{profile.username}</p>
+                    <div>
+                        <p className={styles.messageText}>{message.text}</p>
+                        <p className={styles.messageTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
+                    </div>
+                </div>
             </div>
-            <p className={styles.messageTime}>{date.toLocaleDateString("en-US", { month: "short", weekday: "short", day: "numeric" })} {date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric" })}</p>
-        </div>
+        }
+        </>
     );
 }
 
@@ -119,6 +135,7 @@ const Messages = ({ chatId, supabase, user }) => {
                             message={message}
                             profile={profileCache[message.profile_id]}
                             setProfileCache={setProfileCache}
+                            user={user}
                         />
                     )
                     ) : ""}
@@ -126,7 +143,7 @@ const Messages = ({ chatId, supabase, user }) => {
                 <div className={styles.typeArea}>
                     <form onSubmit={(event) => sendMessage(event)} autoComplete="off">
                         <input type="text" placeholder="Type a message" name="textbox" className={styles.input} />
-                        <button type="submit" className={styles.sendBtn}><FaArrowUp /></button>
+                        <button type="submit" className={styles.sendBtn}><FaRegPaperPlane /></button>
                     </form>
                 </div>
             </div>
