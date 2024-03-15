@@ -1,63 +1,63 @@
 .nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: "Nunito";
-    width: 100%;
-    position: fixed;
-    z-index: 10000000;
-    background-color: rgba(250, 250, 250, 0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Nunito";
+  width: 100%;
+  position: fixed;
+  z-index: 10000000;
+  background-color: rgba(250, 250, 250, 0.5);
 }
 
 .logo {
-    font-size: 1.2rem;
-    margin: 16px 46px;
-    font-weight: 800;
+  font-size: 1.2rem;
+  margin: 16px 46px;
+  font-weight: 800;
 }
 
 .logo a {
-    color: var(--light-text);
+  color: var(--light-text);
 }
 
 .logo a:hover {
-    color: var(--light-hover);
+  color: var(--light-hover);
 }
 
 .links {
-    display: flex;
+  display: flex;
 }
 
 .links ul {
-    margin: 0;
-    padding: 0;
-    display: flex;
+  margin: 0;
+  padding: 0;
+  display: flex;
 }
 
 .links a {
-    color: var(--light-text);
-    padding: 1.6rem 1rem;
-    display: block;
-    font-weight: 800;
+  color: var(--light-text);
+  padding: 1.6rem 1rem;
+  display: block;
+  font-weight: 800;
 }
 
 .links a:hover {
-    color: var(--light-hover);
+  color: var(--light-hover);
 }
 
 .joinBtn {
-    font-family: "Nunito";
-    font-weight: 700;
-    font-size: 1.1rem;
-    border-radius: 10px;
-    background-color: var(--new-color-1);
-    border: none;
-    color: var(--dark-text);
-    text-align: center;
-    padding: 0 30px;
-    cursor: pointer;
-    margin: 13px 30px;
+  font-family: "Nunito";
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  background-color: var(--new-color-1);
+  border: none;
+  color: var(--dark-text);
+  text-align: center;
+  padding: 0 30px;
+  cursor: pointer;
+  margin: 13px 30px;
 }
 
 .joinBtn:hover {
-    background-color: var(--new-color-1-2);
+  background-color: var(--new-color-1-2);
 }

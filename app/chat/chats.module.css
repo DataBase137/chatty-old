@@ -1,70 +1,70 @@
 .container {
-    height: 100vh;
-    width: 200px;
-    position: absolute;
-    left: 60px;
-    box-shadow: 5px 0 3px -3px rgba(52, 52, 53, 0.05);
-    background-color: var(--light-bg);
-    display: flex;
-    /* align-items: center; */
-    flex-direction: column;
+  height: 100vh;
+  width: 200px;
+  position: absolute;
+  left: 60px;
+  box-shadow: 5px 0 3px -3px rgba(52, 52, 53, 0.05);
+  background-color: var(--light-bg);
+  display: flex;
+  /* align-items: center; */
+  flex-direction: column;
 }
 
 .header {
-    display: flex;
-    height: 8vh;
-    align-items: center;
-    /* box-shadow: 0 5px 3px -3px rgba(52, 52, 53, 0.05); */
-    justify-content: space-between;
-    padding: 0 15px;
+  display: flex;
+  height: 8vh;
+  align-items: center;
+  /* box-shadow: 0 5px 3px -3px rgba(52, 52, 53, 0.05); */
+  justify-content: space-between;
+  padding: 0 15px;
 }
 
 .header h1 {
-    font-family: "Montserrat";
-    font-weight: 500;
-    font-size: 1.4rem;
+  font-family: "Montserrat";
+  font-weight: 500;
+  font-size: 1.4rem;
 }
 
 .header button {
-    background-color: var(--light-bg);
-    border: none;
+  background-color: var(--light-bg);
+  border: none;
 }
 
 .icon:hover {
-    cursor: pointer;
-    color: var(--color-8-2);
+  cursor: pointer;
+  color: var(--color-8-2);
 }
 
 .icon {
-    font-size: 1.5rem;
-    color: var(--color-8-4);
+  font-size: 1.5rem;
+  color: var(--color-8-4);
 }
 
 .chat {
-    display: flex;
-    justify-content: space-between;
-    margin: 0 7px;
-    padding: 0 5px;
-    border-radius: 8px;
-    font-family: "Nunito";
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 7px;
+  padding: 0 5px;
+  border-radius: 8px;
+  font-family: "Nunito";
+  align-items: center;
 }
 
 .chatName {
-    font-weight: 700;
-    font-size: 1rem;
+  font-weight: 700;
+  font-size: 1rem;
 }
 
 .chatTime {
-    font-weight: 300;
-    font-size: 0.8rem;
+  font-weight: 300;
+  font-size: 0.8rem;
 }
 
 .chat:hover {
-    background-color: #ebebeb;
-    cursor: pointer;
+  background-color: #ebebeb;
+  cursor: pointer;
 }
 
 .chatSelected {
-    background-color: #ddd;
+  background-color: #ddd;
 }

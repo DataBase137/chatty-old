@@ -1,46 +1,45 @@
-"use client";
+"use client"
 
-import { useEffect, useState, useCallback } from "react";
-import Sidebar from "./sidebar";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import Chats from "./chats";
-import { usePathname } from "next/navigation";
-import Messages from "./messages";
+import { useEffect, useState, useCallback } from "react"
+import Sidebar from "./sidebar"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import Chats from "./chats"
+import { usePathname } from "next/navigation"
+import Messages from "./messages"
 
 const Page = () => {
-    const supabase = createClientComponentClient();
-    const [username, setUsername] = useState(null);
-    const [avatarUrl, setAvatarUrl] = useState(null);
-    const [user, setUser] = useState(null);
-    const chatId = usePathname().slice(6);
+  const supabase = createClientComponentClient()
+  const [username, setUsername] = useState(null)
+  const [avatarUrl, setAvatarUrl] = useState(null)
+  const [user, setUser] = useState(null)
+  const chatId = usePathname().slice(6)
 
-    const getProfile = useCallback(async () => {
+  const getProfile = useCallback(async () => {
+    const { data: user } = await supabase.auth.getUser()
 
-        const { data: user } = await supabase.auth.getUser();
+    setUser(user)
 
-        setUser(user);
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("username, avatar_url")
+      .eq("id", user?.user.id)
+      .single()
 
-        const { data: profile } = await supabase
-            .from('profiles')
-            .select('username, avatar_url')
-            .eq('id', user?.user.id)
-            .single();
+    setUsername(profile.username)
+    setAvatarUrl(profile.avatar_url)
+  }, [supabase])
 
-        setUsername(profile.username);
-        setAvatarUrl(profile.avatar_url);
-    }, [supabase]);
+  useEffect(() => {
+    getProfile()
+  }, [])
 
-    useEffect(() => {
-        getProfile();
-    }, []);
-
-    return (
-        <>
-            <Chats chatId={chatId} supabase={supabase} />
-            <Sidebar />
-            <Messages chatId={chatId} supabase={supabase} user={user} />
-        </>
-    )
+  return (
+    <>
+      <Chats chatId={chatId} supabase={supabase} />
+      <Sidebar />
+      <Messages chatId={chatId} supabase={supabase} user={user} />
+    </>
+  )
 }
 
-export default Page;
+export default Page

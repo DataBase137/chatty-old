@@ -6,11 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --check --ignore-path .gitignore .",
+    "format:fix": "prettier --write --ignore-path .gitignore ."
   },
   "dependencies": {
     "@supabase/auth-helpers-nextjs": "^0.9.0",
-    "@supabase/supabase-js": "^2.39.7",
+    "@supabase/supabase-js": "^2.39.8",
     "next": "^14.1.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -18,7 +20,10 @@
   },
   "devDependencies": {
     "eslint": "latest",
-    "eslint-config-next": "latest"
+    "eslint-config-next": "latest",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.2.5",
+    "@types/bun": "latest"
   },
   "main": "next.config.js",
   "author": "",
@@ -35,5 +40,8 @@
   "optionalDependencies": {
     "bufferutil": "^4.0.8",
     "utf-8-validate": "^5.0.10"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
   }
 }

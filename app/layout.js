@@ -1,14 +1,14 @@
 import "./globals.css"
 
 export const metadata = {
-  title: 'chatty',
-  description: 'a chat app',
+  title: "chatty",
+  description: "a chat app",
 }
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-        <body>{children}</body>
+      <body>{children}</body>
     </html>
   )
 }

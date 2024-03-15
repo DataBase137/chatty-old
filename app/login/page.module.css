@@ -1,62 +1,62 @@
 .container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 50%);
-    background: var(--light-bg);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 50%);
+  background: var(--light-bg);
 }
 
 .right {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .form {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .input {
-    font-size: 1.3rem;
-    width: 350px;
-    font-family: "Poppins";
-    font-weight: 400;
-    border: none;
-    background-color: var(--new-color-3-2);
-    border-radius: 10px;
-    color: #1C1C1C;
-    padding: 15px 25px;
-    margin: 3px 0;
-    outline: none;
+  font-size: 1.3rem;
+  width: 350px;
+  font-family: "Poppins";
+  font-weight: 400;
+  border: none;
+  background-color: var(--new-color-3-2);
+  border-radius: 10px;
+  color: #1c1c1c;
+  padding: 15px 25px;
+  margin: 3px 0;
+  outline: none;
 }
 
 .sendBtn {
-    border: none;
-    background-color: var(--new-color-5);
-    margin: 10px 80px 0 80px;
-    font-family: "Nunito";
-    font-weight: 600;
-    color: var(--dark-text);
-    font-size: 1.3rem;
-    border-radius: 10px;
-    padding: 10px 0;
+  border: none;
+  background-color: var(--new-color-5);
+  margin: 10px 80px 0 80px;
+  font-family: "Nunito";
+  font-weight: 600;
+  color: var(--dark-text);
+  font-size: 1.3rem;
+  border-radius: 10px;
+  padding: 10px 0;
 }
 
 .sendBtn:hover {
-    cursor: pointer;
-    background-color: var(--new-color-5-2);
+  cursor: pointer;
+  background-color: var(--new-color-5-2);
 }
 
 .redirect {
-    font-size: 1.2rem;
-    font-family: "Poppins";
-    margin-left: 10px;
-    margin-top: 30px;
-    color: var(--light-text);
+  font-size: 1.2rem;
+  font-family: "Poppins";
+  margin-left: 10px;
+  margin-top: 30px;
+  color: var(--light-text);
 }
 
 .redirect a {
-    color: var(--new-color-1);
-    font-weight: 600;
+  color: var(--new-color-1);
+  font-weight: 600;
 }

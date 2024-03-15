@@ -1,165 +1,164 @@
 .container {
-    display: grid;
-    background: var(--light-bg);
+  display: grid;
+  background: var(--light-bg);
 }
 
 @media (min-width: 1300px) {
-    .container {
-        grid-template-columns: repeat(auto-fill, 50%);
-    }
+  .container {
+    grid-template-columns: repeat(auto-fill, 50%);
+  }
 }
 
 @media (max-width: 1300px) {
-    .topRight {
-        display: none !important;
-    }
+  .topRight {
+    display: none !important;
+  }
 
-    .topContent {
-        margin: 0 50px;
-    }
+  .topContent {
+    margin: 0 50px;
+  }
 }
 
 @media (max-width: 600px) {
-    .topContent {
-        margin: 0 70px;
-    }
+  .topContent {
+    margin: 0 70px;
+  }
 }
 
 /* Sides weird at less than 1300px, 650px weird again, 565px log in button gets weird, lets just say 600 for full mobile layout */
 
 .topContent {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .txtType {
-    font-family: "Nunito";
-    font-size: 4rem;
-    font-variant: small-caps;
-    font-weight: 500;
-    color: var(--light-text);
+  font-family: "Nunito";
+  font-size: 4rem;
+  font-variant: small-caps;
+  font-weight: 500;
+  color: var(--light-text);
 }
 
-.txtType>span>span {
-    border-right: .5rem solid var(--light-text);
-    animation: blinker 1s linear infinite;
+.txtType > span > span {
+  border-right: 0.5rem solid var(--light-text);
+  animation: blinker 1s linear infinite;
 }
 
 @keyframes blinker {
-    50% {
-        opacity: 0;
-    }
+  50% {
+    opacity: 0;
+  }
 }
 
 .topLeft {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 @media (min-width: 1300px) {
-    
 }
 
 .topRight {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .bottomLeft {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .bottomRight {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .slogan {
-    font-family: "Poppins";
-    font-size: 23px;
-    font-weight: 500;
-    padding: 13px 0;
-    color: var(--light-text);
+  font-family: "Poppins";
+  font-size: 23px;
+  font-weight: 500;
+  padding: 13px 0;
+  color: var(--light-text);
 }
 
 .slogan span {
-    color: var(--new-color-5);
+  color: var(--new-color-5);
 }
 
 .btn {
-    font-family: "Nunito";
-    font-weight: 700;
-    line-height: 130%;
-    font-size: 1.1rem;
-    border-radius: 10px;
-    background-color: var(--new-color-1);
-    border: none;
-    color: var(--dark-text);
-    text-align: center;
-    padding: 16px 30px;
-    width: 127px;
+  font-family: "Nunito";
+  font-weight: 700;
+  line-height: 130%;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  background-color: var(--new-color-1);
+  border: none;
+  color: var(--dark-text);
+  text-align: center;
+  padding: 16px 30px;
+  width: 127px;
 }
 
 .btn:hover {
-    cursor: pointer;
-    background-color: var(--new-color-1-2);
+  cursor: pointer;
+  background-color: var(--new-color-1-2);
 }
 
 .downArrowContainer {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    width: 100vw;
-    font-size: 40px;
-    bottom: 10%;
-    animation: bounce 2s ease infinite;
-    color: var(--light-text);
-    z-index: 4;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+  font-size: 40px;
+  bottom: 10%;
+  animation: bounce 2s ease infinite;
+  color: var(--light-text);
+  z-index: 4;
 }
 
 .downArrow {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 @keyframes bounce {
-    0% {
-        transform: translateY(0);
-    }
+  0% {
+    transform: translateY(0);
+  }
 
-    50% {
-        transform: translateY(40px);
-    }
+  50% {
+    transform: translateY(40px);
+  }
 
-    100% {
-        transform: translateY(0);
-    }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 .mask {
-    mask-type: luminance;
+  mask-type: luminance;
 }
 
 .divide {
-    position: absolute;
-    bottom: 0;
-    fill: var(--new-color-3);
+  position: absolute;
+  bottom: 0;
+  fill: var(--new-color-3);
 }
 
 .divide2 {
-    position: absolute;
-    top: 99.9%;
-    fill: var(--new-color-3);
+  position: absolute;
+  top: 99.9%;
+  fill: var(--new-color-3);
 }
