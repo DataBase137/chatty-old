@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
-import Sidebar from "./sidebar"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import Chats from "./chats"
 import { usePathname } from "next/navigation"
@@ -35,8 +34,7 @@ const Page = () => {
 
   return (
     <>
-      <Chats chatId={chatId} supabase={supabase} />
-      <Sidebar />
+      <Chats chatId={chatId} supabase={supabase} username={username} />
       <Messages chatId={chatId} supabase={supabase} user={user} />
     </>
   )

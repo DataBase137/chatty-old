@@ -1,26 +1,24 @@
 .container {
   height: 100vh;
-  width: 200px;
+  width: 300px;
   position: absolute;
-  left: 60px;
   box-shadow: 5px 0 3px -3px rgba(52, 52, 53, 0.05);
   background-color: var(--light-bg);
   display: flex;
-  /* align-items: center; */
   flex-direction: column;
+  justify-content: space-between;
+  font-family: "Montserrat";
 }
 
 .header {
   display: flex;
   height: 8vh;
   align-items: center;
-  /* box-shadow: 0 5px 3px -3px rgba(52, 52, 53, 0.05); */
   justify-content: space-between;
   padding: 0 15px;
 }
 
 .header h1 {
-  font-family: "Montserrat";
   font-weight: 500;
   font-size: 1.4rem;
 }
@@ -43,20 +41,25 @@
 .chat {
   display: flex;
   justify-content: space-between;
-  margin: 0 7px;
-  padding: 0 5px;
+  margin: 5px 10px;
+  padding: 0 10px;
   border-radius: 8px;
-  font-family: "Nunito";
   align-items: center;
 }
 
 .chatName {
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1rem;
+  margin-bottom: 0;
 }
 
 .chatTime {
   font-weight: 300;
+  font-size: 0.9rem;
+}
+
+.chatLatestMessage {
+  margin-top: 10px;
   font-size: 0.8rem;
 }
 
@@ -67,4 +70,38 @@
 
 .chatSelected {
   background-color: #ddd;
+}
+
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 10px;
+}
+
+.bottomInfo {
+  display: flex;
+  align-items: center;
+}
+
+.container button {
+  background-color: var(--light-bg);
+  border: none;
+}
+
+.icon {
+  font-size: 1.5rem;
+  color: var(--color-8-4);
+}
+
+.icon:hover {
+  cursor: pointer;
+  color: var(--color-8-2);
+}
+
+.username {
+  font-family: "Nunito";
+  font-size: 1.4rem;
+  font-weight: 700;
+  padding-left: 10px;
 }

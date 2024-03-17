@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback } from "react"
 import styles from "./messages.module.css"
 import { FaRegPaperPlane } from "react-icons/fa"
 
-const Message = ({ message, profile, setProfileCache, user }) => {
+const Message = ({ message, profile, setProfileCache, user, supabase }) => {
   const date = new Date(message.created_at)
 
   useEffect(() => {
@@ -28,50 +28,39 @@ const Message = ({ message, profile, setProfileCache, user }) => {
     }
   }, [profile, message.profile_id])
 
+  const isSentByUser = profile.id === user.user.id
+
   return (
-    <>
-      {profile.id === user.user.id ? (
-        <div className={`${styles.message} ${styles.messageRight}`}>
-          <div className={styles.messageContent}>
-            <p className={styles.messageUser}>{profile.username}</p>
-            <div>
-              <p className={styles.messageTime}>
-                {date.toLocaleDateString("en-US", {
-                  month: "short",
-                  weekday: "short",
-                  day: "numeric",
-                })}{" "}
-                {date.toLocaleTimeString("en-US", {
-                  hour: "numeric",
-                  minute: "numeric",
-                })}
-              </p>
-              <p className={styles.messageText}>{message.text}</p>
-            </div>
-          </div>
+    <div
+      className={`${styles.message} ${isSentByUser ? styles.messageRight : styles.messageLeft}`}
+    >
+      <div className={styles.messageContent}>
+        <p className={styles.messageUser}>{profile.username}</p>
+        <div>
+          {!isSentByUser ? (
+            <p className={styles.messageText}>{message.text}</p>
+          ) : (
+            ""
+          )}
+          <p className={styles.messageTime}>
+            {date.toLocaleDateString("en-US", {
+              month: "short",
+              weekday: "short",
+              day: "numeric",
+            })}{" "}
+            {date.toLocaleTimeString("en-US", {
+              hour: "numeric",
+              minute: "numeric",
+            })}
+          </p>
+          {isSentByUser ? (
+            <p className={styles.messageText}>{message.text}</p>
+          ) : (
+            ""
+          )}
         </div>
-      ) : (
-        <div className={`${styles.message} ${styles.messageLeft}`}>
-          <div className={styles.messageContent}>
-            <p className={styles.messageUser}>{profile.username}</p>
-            <div>
-              <p className={styles.messageText}>{message.text}</p>
-              <p className={styles.messageTime}>
-                {date.toLocaleDateString("en-US", {
-                  month: "short",
-                  weekday: "short",
-                  day: "numeric",
-                })}{" "}
-                {date.toLocaleTimeString("en-US", {
-                  hour: "numeric",
-                  minute: "numeric",
-                })}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+      </div>
+    </div>
   )
 }
 
@@ -163,6 +152,7 @@ const Messages = ({ chatId, supabase, user }) => {
                   profile={profileCache[message.profile_id]}
                   setProfileCache={setProfileCache}
                   user={user}
+                  supabase={supabase}
                 />
               ))
             : ""}

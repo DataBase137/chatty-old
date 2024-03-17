@@ -12,11 +12,11 @@ a chat app
 - Add create chat button functionability
 - Font size change on smaller screens
 - Mobile Navbar
+- Get only a certain amount of messages on initial load, get more when scrolled to top
 
 # Known bugs/Things to Fix:
 
 - Need an verification email resend button
-- Need to add redirect to most recent chat from /chat and/or redo of url system
-- Chat times are from when they are created, need to set up last message time
+- Make dynamic pages for chats with redirects to latest chat
 - Fix whitelisted only emails
-- Profile cache fetching doesn't work and throws error
+- Chats and messages components need to be cleaned up
