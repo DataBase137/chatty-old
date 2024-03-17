@@ -4,6 +4,7 @@ import styles from "./page.module.css"
 import { useRouter } from "next/navigation"
 import Navbar from "../navbar"
 
+// * Sign Up Page Component
 const Page = () => {
   const router = useRouter()
 

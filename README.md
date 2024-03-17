@@ -2,21 +2,25 @@
 
 a chat app
 
-# Things to add
+## Current Features
 
-- Deletion, editing, and more features
-- Separate chat functionability
-- Profiles in chat area
-- Sign up with other providers
-- Verify page styles
-- Add create chat button functionability
-- Font size change on smaller screens
-- Mobile Navbar
-- Get only a certain amount of messages on initial load, get more when scrolled to top
+- Real-time chat functionality
+- User authentication with email and password
 
-# Known bugs/Things to Fix:
+## Planned Improvements
 
-- Need an verification email resend button
-- Make dynamic pages for chats with redirects to latest chat
-- Fix whitelisted only emails
-- Chats and messages components need to be cleaned up
+- **Enhanced Chat Features:** Add deletion, editing, and more advanced functionalities to the chat interface
+- **Separate Chat Functionality:** Implement the ability to create, rename, delete, and add users to chats
+- **Profile Integration:** Display user profiles within the chat area
+- **Additional Authentication Providers:** Allow users to sign up using third-party authentication providers (e.g., Google, Facebook)
+- **Re-style Pages:** Improve the visual appearance and user experience of certain pages
+- **Responsiveness:** Implement mobile layouts and responsive design for better fluidity for different displays
+- **Lazy Loading Messages:** Load a certain number of messages initially and fetch more as users scroll to the top
+
+## Known Bugs / Fixes Needed
+
+- **Dynamic Chat Pages:** Create dynamic pages for individual chats and implement redirects to the latest chat
+- **Whitelisted Emails:** Fix issues related to whitelisted email addresses so users can sign up
+- **Code Clean-Up:** Refactor and clean up the codebase for components and pages to improve maintainability and readability
+
+Feel free to reach out, suggest improvements, or report any issues you encounter.

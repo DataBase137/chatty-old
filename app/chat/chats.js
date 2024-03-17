@@ -1,12 +1,13 @@
 "use client"
 
-import { FaPlus } from "react-icons/fa"
-import styles from "./chats.module.css"
+import { FaPlus, FaUser } from "react-icons/fa"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { FaUser } from "react-icons/fa"
+import styles from "./chats.module.css"
 
+// * Component to display the time since the last update
 const TimeSinceUpdate = ({ date }) => {
+  // Function to calculate time difference
   const formatChatTime = (timestamp) => {
     const chatDate = new Date(timestamp)
     const currentDate = new Date()
@@ -34,28 +35,34 @@ const TimeSinceUpdate = ({ date }) => {
     }
   }
 
-  const [elapsedTime, setElapsedTime] = useState(formatChatTime(date))
+  // Setting to the formatted time
+  const [formattedTime, setFormattedTime] = useState(formatChatTime(date))
 
+  // UseEffect to refresh the formatted time every minute
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setElapsedTime(formatChatTime(date))
+    const interval = setInterval(() => {
+      setFormattedTime(formatChatTime(date))
     }, 60000)
 
-    return () => clearInterval(intervalId)
+    return () => clearInterval(interval)
   }, [date])
 
+  // UseEffect to set formatted time on direct update
   useEffect(() => {
-    setElapsedTime(formatChatTime(date))
+    setFormattedTime(formatChatTime(date))
   }, [date])
 
-  return <p className={styles.chatTime}>{elapsedTime}</p>
+  // Returns the formatted time
+  return <p className={styles.chatTime}>{formattedTime}</p>
 }
 
+// * Individual chat component
 const Chat = ({ chat, chatId, supabase }) => {
   const [latestMessage, setLatestMessage] = useState("")
   const router = useRouter()
   const date = new Date(chat.last_update)
 
+  // UseEffect to get the latest message sent in current chat
   useEffect(() => {
     const getLatestMessage = async () => {
       const { data } = await supabase
@@ -71,6 +78,7 @@ const Chat = ({ chat, chatId, supabase }) => {
     getLatestMessage()
   }, [chat, supabase])
 
+  // Check if the current chat is selected
   const isSelected = chatId === chat.id
 
   return (
@@ -80,21 +88,26 @@ const Chat = ({ chat, chatId, supabase }) => {
         if (!isSelected) router.push(`/chat/${chat.id}`)
       }}
     >
+      {/* Left side of chat component */}
       <div className={styles.chatLeft}>
         <p className={styles.chatName}>{chat.name}</p>
         <p className={styles.chatLatestMessage}>
+          {/* Displaying latest chat message */}
           {latestMessage.profile &&
             `${latestMessage.profile.username}: ${latestMessage.text}`}
         </p>
       </div>
+      {/* Formatted time */}
       <TimeSinceUpdate date={date} />
     </div>
   )
 }
 
+// * Component to display list of chats
 const Chats = ({ chatId, supabase, username }) => {
   const [chats, setChats] = useState([])
 
+  // UseEffect to listen to updates on the chats table
   useEffect(() => {
     const channel = supabase
       .channel("chat-changes")
@@ -106,19 +119,25 @@ const Chats = ({ chatId, supabase, username }) => {
           table: "chats",
         },
         (payload) => {
+          // First setting the current chats
           const updatedChats = [...chats]
 
+          // Finding which index is the updated chat
           const index = updatedChats.findIndex(
             (chat) => chat.id === payload.new.id
           )
 
+          // Making sure that the chat exists
           if (index !== -1) {
+            // Setting the old chat to the new chat
             updatedChats[index] = payload.new
 
+            // Sorting the chats by latest update
             updatedChats.sort(
               (a, b) => new Date(b.last_update) - new Date(a.last_update)
             )
 
+            // Finally setting the chats
             setChats(updatedChats)
           }
         }
@@ -130,6 +149,7 @@ const Chats = ({ chatId, supabase, username }) => {
     }
   }, [supabase, chats, setChats])
 
+  // Function for creating new chats
   const createChat = async (name) => {
     await supabase.from("chats").insert([
       {
@@ -138,6 +158,7 @@ const Chats = ({ chatId, supabase, username }) => {
     ])
   }
 
+  // Function to get list of chats
   const getChats = async () => {
     const { data } = await supabase
       .from("chats")
@@ -147,6 +168,7 @@ const Chats = ({ chatId, supabase, username }) => {
     setChats(data)
   }
 
+  // Getting chats on initial page load
   useEffect(() => {
     getChats()
   }, [])

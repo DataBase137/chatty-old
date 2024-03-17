@@ -2,7 +2,10 @@
 
 import styles from "./page.module.css"
 
+// * Verification info page
 const Page = () => {
+  // TODO: Add button for resend and build out styles
+
   return (
     <>
       <h1>

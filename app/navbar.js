@@ -2,14 +2,17 @@ import Link from "next/link"
 import styles from "./navbar.module.css"
 import { useRouter } from "next/navigation"
 
+// * Navbar component
 const Navbar = ({ type }) => {
   const router = useRouter()
 
   return (
     <nav className={styles.nav}>
+      {/* Logo */}
       <h1 className={styles.logo}>
         <Link href="/">chatty</Link>
       </h1>
+      {/* Navigation Links */}
       <div className={styles.links}>
         <ul>
           <li>
@@ -22,6 +25,7 @@ const Navbar = ({ type }) => {
             <Link href="#">Privacy</Link>
           </li>
         </ul>
+        {/* Conditional rendering based on page */}
         {type === "home" && (
           <button
             className={styles.joinBtn}

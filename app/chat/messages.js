@@ -1,13 +1,15 @@
 "use client"
 
 import { useEffect, useRef, useState, useCallback } from "react"
-import styles from "./messages.module.css"
 import { FaRegPaperPlane } from "react-icons/fa"
+import styles from "./messages.module.css"
 
+// * Component to display individual messages
 const Message = ({ message, profile, setProfileCache, user, supabase }) => {
   const date = new Date(message.created_at)
 
   useEffect(() => {
+    // Function to fetch and cache profile data
     const fetchProfile = async () => {
       const { data } = await supabase
         .from("profiles")
@@ -23,25 +25,28 @@ const Message = ({ message, profile, setProfileCache, user, supabase }) => {
       }
     }
 
+    // Fetch profile if it isn't already cached
     if (!profile) {
       fetchProfile()
     }
   }, [profile, message.profile_id])
 
-  const isSentByUser = profile.id === user.user.id
+  // Check if message is sent by current user
+  const isSentByUser = profile.id === user.id
 
   return (
     <div
       className={`${styles.message} ${isSentByUser ? styles.messageRight : styles.messageLeft}`}
     >
       <div className={styles.messageContent}>
+        {/* Username of the person who sent it */}
         <p className={styles.messageUser}>{profile.username}</p>
         <div>
-          {!isSentByUser ? (
+          {/* If not sent by user put text here */}
+          {!isSentByUser && (
             <p className={styles.messageText}>{message.text}</p>
-          ) : (
-            ""
           )}
+          {/* Display message timestamp */}
           <p className={styles.messageTime}>
             {date.toLocaleDateString("en-US", {
               month: "short",
@@ -53,22 +58,21 @@ const Message = ({ message, profile, setProfileCache, user, supabase }) => {
               minute: "numeric",
             })}
           </p>
-          {isSentByUser ? (
-            <p className={styles.messageText}>{message.text}</p>
-          ) : (
-            ""
-          )}
+          {/* If sent by user put text here */}
+          {isSentByUser && <p className={styles.messageText}>{message.text}</p>}
         </div>
       </div>
     </div>
   )
 }
 
+// * Component to display messages in a chat
 const Messages = ({ chatId, supabase, user }) => {
   const chat = useRef()
   const [messages, setMessages] = useState(null)
   const [profileCache, setProfileCache] = useState({})
 
+  // Function to fetch messages
   const getMessages = useCallback(
     async (id) => {
       const { data } = await supabase
@@ -77,6 +81,7 @@ const Messages = ({ chatId, supabase, user }) => {
         .match({ chat_id: id })
         .order("created_at")
 
+      // Formatting the profiles from the messages fetched
       const newProfiles = Object.fromEntries(
         data
           ?.map((message) => message.profile)
@@ -84,6 +89,7 @@ const Messages = ({ chatId, supabase, user }) => {
           .map((profile) => [profile.id, profile])
       )
 
+      // Caching given profiles
       setProfileCache((current) => ({
         ...current,
         ...newProfiles,
@@ -95,9 +101,11 @@ const Messages = ({ chatId, supabase, user }) => {
   )
 
   useEffect(() => {
+    // Fetch messages for given chat
     getMessages(chatId)
   }, [chatId])
 
+  // UseEffect to listen for inserts on the messages table (for given chat)
   useEffect(() => {
     const channel = supabase
       .channel("message-changes")
@@ -110,6 +118,7 @@ const Messages = ({ chatId, supabase, user }) => {
           filter: `chat_id=eq.${chatId}`,
         },
         (payload) => {
+          // Update messages when a new message is inserted
           setMessages((current) => [...current, payload.new])
         }
       )
@@ -120,13 +129,18 @@ const Messages = ({ chatId, supabase, user }) => {
     }
   }, [supabase, chatId])
 
+  // Function to send a messave
   const sendMessage = async (event) => {
+    // Prevent default form submission method
     event.preventDefault()
+    // Get the message text from input
     const message = event.target[0].value
 
     if (message) {
+      // Once the message is stored, clear the form
       event.target.reset()
 
+      // Send message to the chat
       await supabase.from("messages").insert([
         {
           text: message,
@@ -136,6 +150,7 @@ const Messages = ({ chatId, supabase, user }) => {
     }
   }
 
+  // Scroll chat window to bottom when new messages are added
   useEffect(() => {
     chat.current.scrollTop = chat.current.scrollHeight
   }, [messages])

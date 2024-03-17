@@ -16,14 +16,14 @@
     "next": "^14.1.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-icons": "^5.0.1"
+    "react-icons": "latest"
   },
   "devDependencies": {
+    "@types/bun": "latest",
     "eslint": "latest",
     "eslint-config-next": "latest",
     "eslint-config-prettier": "^9.1.0",
-    "prettier": "^3.2.5",
-    "@types/bun": "latest"
+    "prettier": "^3.2.5"
   },
   "main": "next.config.js",
   "author": "",
