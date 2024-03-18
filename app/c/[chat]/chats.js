@@ -1,9 +1,7 @@
-"use client"
-
 import { FaPlus, FaUser } from "react-icons/fa"
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useCallback, useEffect, useState } from "react"
 import styles from "./chats.module.css"
+import Link from "next/link"
 
 // * Component to display the time since the last update
 const TimeSinceUpdate = ({ date }) => {
@@ -57,9 +55,8 @@ const TimeSinceUpdate = ({ date }) => {
 }
 
 // * Individual chat component
-const Chat = ({ chat, chatId, supabase }) => {
+const Chat = ({ chat, setChatId, publicChatId, supabase }) => {
   const [latestMessage, setLatestMessage] = useState("")
-  const router = useRouter()
   const date = new Date(chat.last_update)
 
   // UseEffect to get the latest message sent in current chat
@@ -79,32 +76,34 @@ const Chat = ({ chat, chatId, supabase }) => {
   }, [chat, supabase])
 
   // Check if the current chat is selected
-  const isSelected = chatId === chat.id
+  const isSelected = publicChatId === chat.public_id
 
+  // If it is, set the chat id variable to the chat id
+  if (isSelected) setChatId(chat.id)
+
+  // Render the chat component
   return (
-    <div
+    <Link
       className={`${styles.chat} ${isSelected && styles.chatSelected}`}
-      onClick={() => {
-        if (!isSelected) router.push(`/chat/${chat.id}`)
-      }}
+      href={`/c/${chat.public_id}`}
     >
       {/* Left side of chat component */}
       <div className={styles.chatLeft}>
         <p className={styles.chatName}>{chat.name}</p>
         <p className={styles.chatLatestMessage}>
-          {/* Displaying latest chat message */}
+          {/* Display chat message */}
           {latestMessage.profile &&
             `${latestMessage.profile.username}: ${latestMessage.text}`}
         </p>
       </div>
       {/* Formatted time */}
       <TimeSinceUpdate date={date} />
-    </div>
+    </Link>
   )
 }
 
 // * Component to display list of chats
-const Chats = ({ chatId, supabase, username }) => {
+const Chats = ({ chatId, setChatId, publicChatId, supabase, username }) => {
   const [chats, setChats] = useState([])
 
   // UseEffect to listen to updates on the chats table
@@ -159,19 +158,26 @@ const Chats = ({ chatId, supabase, username }) => {
   }
 
   // Function to get list of chats
-  const getChats = async () => {
-    const { data } = await supabase
-      .from("chats")
-      .select("*")
-      .order("last_update", { ascending: false })
+  const getChats = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from("chats")
+        .select("*")
+        .order("last_update", { ascending: false })
 
-    setChats(data)
-  }
+      if (error) throw error
+      // Throwing the error will stop the code from continuing
+
+      setChats(data)
+    } catch (error) {
+      console.error("Error fetching chats:", error.message)
+    }
+  }, [supabase])
 
   // Getting chats on initial page load
   useEffect(() => {
     getChats()
-  }, [])
+  }, [getChats])
 
   return (
     <>
@@ -189,7 +195,8 @@ const Chats = ({ chatId, supabase, username }) => {
                   return (
                     <Chat
                       chat={chat}
-                      chatId={chatId}
+                      setChatId={setChatId}
+                      publicChatId={publicChatId}
                       supabase={supabase}
                       key={chat.id}
                     />

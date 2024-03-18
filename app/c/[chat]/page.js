@@ -4,40 +4,42 @@ import { useEffect, useState, useCallback } from "react"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import Chats from "./chats"
 import Messages from "./messages"
-import { usePathname } from "next/navigation"
 
-const Page = () => {
+const Page = ({ params }) => {
   // Initialize Supabase client
   // ! *DO NOT DELETE THIS PROVIDES A CLIENT FOR ALL NESTED COMPONENTS*
   const supabase = createClientComponentClient()
 
-  // State variables
+  // State variables for user data
   const [username, setUsername] = useState(null)
   const [avatarUrl, setAvatarUrl] = useState(null)
   const [user, setUser] = useState(null)
 
-  // Get chat ID from pathname
-  const chatId = usePathname().slice(6)
+  // Variables for chat
+  const [chatId, setChatId] = useState(null)
+  // ! Public chat ids are created randomly with no check for uniqueness and will throw an error if the same as an existing one
+  const publicChatId = parseInt(params.chat)
 
   // Function to fetch user profile
   const getProfile = useCallback(async () => {
     try {
+      // Fetch user information
       const {
         data: { user },
       } = await supabase.auth.getUser()
-      // ! User is defined as an object with a property of user if not surrounded with {} as shown above
+      // ! If not surrounded by {} (as shown above), 'user' is an object with a property named 'user'
       setUser(user)
 
+      // Fetch user profile data
       const { data: profile, error } = await supabase
         .from("profiles")
         .select("username, avatar_url")
         .eq("id", user?.id)
         .single()
 
-      if (error) {
-        throw error
-      }
+      if (error) throw error
 
+      // Update state with profile data
       setUsername(profile?.username)
       setAvatarUrl(profile?.avatar_url)
     } catch (error) {
@@ -48,15 +50,26 @@ const Page = () => {
   // Fetch user profile on page load
   useEffect(() => {
     getProfile()
-  }, [])
+  }, [getProfile])
 
   return (
     <>
       {/* Render Chats component */}
-      <Chats chatId={chatId} supabase={supabase} username={username} />
+      <Chats
+        chatId={chatId}
+        setChatId={setChatId}
+        publicChatId={publicChatId}
+        supabase={supabase}
+        username={username}
+      />
 
       {/* Render Messages component */}
-      <Messages chatId={chatId} supabase={supabase} user={user} />
+      <Messages
+        chatId={chatId}
+        publicChatId={publicChatId}
+        supabase={supabase}
+        user={user}
+      />
     </>
   )
 }

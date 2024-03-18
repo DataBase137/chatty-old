@@ -1,11 +1,8 @@
 import Link from "next/link"
 import styles from "./navbar.module.css"
-import { useRouter } from "next/navigation"
+import Button from "./button"
 
-// * Navbar component
 const Navbar = ({ type }) => {
-  const router = useRouter()
-
   return (
     <nav className={styles.nav}>
       {/* Logo */}
@@ -27,12 +24,9 @@ const Navbar = ({ type }) => {
         </ul>
         {/* Conditional rendering based on page */}
         {type === "home" && (
-          <button
-            className={styles.joinBtn}
-            onClick={() => router.push("/login")}
-          >
+          <Button href="/login" nav>
             Log In
-          </button>
+          </Button>
         )}
       </div>
     </nav>

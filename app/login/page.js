@@ -1,13 +1,9 @@
-"use client"
-
 import styles from "./page.module.css"
-import { useRouter } from "next/navigation"
 import Navbar from "../navbar"
+import Link from "next/link"
 
 // * Log In Page Component
 const Page = () => {
-  const router = useRouter()
-
   return (
     <>
       <div className={styles.container}>
@@ -44,14 +40,7 @@ const Page = () => {
               </button>
             </form>
             <p className={styles.redirect}>
-              Not a user yet?{" "}
-              <a
-                onClick={() => {
-                  router.push("/signup")
-                }}
-              >
-                Sign Up
-              </a>
+              Not a user yet? <Link href="/signup">Sign Up</Link>
             </p>
           </div>
         </div>

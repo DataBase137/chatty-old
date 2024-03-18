@@ -1,0 +1,23 @@
+.navBtn {
+  padding: 0 30px !important;
+  margin: 13px 30px;
+  width: 100% !important;
+}
+
+.btn {
+  font-family: "Nunito";
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  background-color: var(--new-color-1);
+  border: none;
+  color: var(--dark-text);
+  text-align: center;
+  padding: 16px 30px;
+  width: 127px;
+}
+
+.btn:hover {
+  cursor: pointer;
+  background-color: var(--new-color-1-2);
+}

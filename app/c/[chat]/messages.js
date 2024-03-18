@@ -1,5 +1,3 @@
-"use client"
-
 import { useEffect, useRef, useState, useCallback } from "react"
 import { FaRegPaperPlane } from "react-icons/fa"
 import styles from "./messages.module.css"
@@ -29,7 +27,7 @@ const Message = ({ message, profile, setProfileCache, user, supabase }) => {
     if (!profile) {
       fetchProfile()
     }
-  }, [profile, message.profile_id])
+  }, [profile, message.profile_id, setProfileCache, supabase])
 
   // Check if message is sent by current user
   const isSentByUser = profile.id === user.id
@@ -73,37 +71,34 @@ const Messages = ({ chatId, supabase, user }) => {
   const [profileCache, setProfileCache] = useState({})
 
   // Function to fetch messages
-  const getMessages = useCallback(
-    async (id) => {
-      const { data } = await supabase
-        .from("messages")
-        .select("*, profile: profiles(*)")
-        .match({ chat_id: id })
-        .order("created_at")
+  const getMessages = useCallback(async () => {
+    const { data } = await supabase
+      .from("messages")
+      .select("*, profile: profiles(*)")
+      .match({ chat_id: chatId })
+      .order("created_at")
 
-      // Formatting the profiles from the messages fetched
-      const newProfiles = Object.fromEntries(
-        data
-          ?.map((message) => message.profile)
-          .filter(Boolean)
-          .map((profile) => [profile.id, profile])
-      )
+    // Formatting the profiles from the messages fetched
+    const newProfiles = Object.fromEntries(
+      data
+        ?.map((message) => message.profile)
+        .filter(Boolean)
+        .map((profile) => [profile.id, profile])
+    )
 
-      // Caching given profiles
-      setProfileCache((current) => ({
-        ...current,
-        ...newProfiles,
-      }))
+    // Caching given profiles
+    setProfileCache((current) => ({
+      ...current,
+      ...newProfiles,
+    }))
 
-      setMessages(data)
-    },
-    [supabase]
-  )
+    setMessages(data)
+  }, [chatId, supabase])
 
   useEffect(() => {
-    // Fetch messages for given chat
-    getMessages(chatId)
-  }, [chatId])
+    // Fetch messages for given chats
+    if (chatId) getMessages()
+  }, [getMessages, chatId])
 
   // UseEffect to listen for inserts on the messages table (for given chat)
   useEffect(() => {
@@ -134,7 +129,7 @@ const Messages = ({ chatId, supabase, user }) => {
     // Prevent default form submission method
     event.preventDefault()
     // Get the message text from input
-    const message = event.target[0].value
+    const message = event.target.elements.textbox.value.trim()
 
     if (message) {
       // Once the message is stored, clear the form
@@ -173,7 +168,7 @@ const Messages = ({ chatId, supabase, user }) => {
             : ""}
         </div>
         <div className={styles.typeArea}>
-          <form onSubmit={(event) => sendMessage(event)} autoComplete="off">
+          <form onSubmit={sendMessage} autoComplete="off">
             <input
               type="text"
               placeholder="Type a message"

@@ -33,31 +33,13 @@
   display: flex;
 }
 
-.links a {
+.links ul a {
   color: var(--light-text);
   padding: 1.6rem 1rem;
   display: block;
   font-weight: 800;
 }
 
-.links a:hover {
+.links ul a:hover {
   color: var(--light-hover);
-}
-
-.joinBtn {
-  font-family: "Nunito";
-  font-weight: 700;
-  font-size: 1.1rem;
-  border-radius: 10px;
-  background-color: var(--new-color-1);
-  border: none;
-  color: var(--dark-text);
-  text-align: center;
-  padding: 0 30px;
-  cursor: pointer;
-  margin: 13px 30px;
-}
-
-.joinBtn:hover {
-  background-color: var(--new-color-1-2);
 }

@@ -45,6 +45,7 @@
   padding: 0 10px;
   border-radius: 8px;
   align-items: center;
+  color: var(--light-text);
 }
 
 .chatName {
@@ -65,7 +66,6 @@
 
 .chat:hover {
   background-color: #ebebeb;
-  cursor: pointer;
 }
 
 .chatSelected {

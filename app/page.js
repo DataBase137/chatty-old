@@ -1,10 +1,11 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useCallback } from "react"
 import styles from "./page.module.css"
 import Navbar from "./navbar"
 import { FaChevronDown } from "react-icons/fa"
 import { useRouter } from "next/navigation"
+import Button from "./button"
 
 const Page = () => {
   const router = useRouter()
@@ -66,7 +67,7 @@ const Page = () => {
   }
 
   // Init App
-  const init = () => {
+  const init = useCallback(() => {
     // Check if element is loaded in
     if (typewriterElement.current) {
       const txtElement = document.querySelector("#txt-type")
@@ -80,11 +81,11 @@ const Page = () => {
         init()
       }, 500)
     }
-  }
+  }, [])
 
   useEffect(() => {
     init()
-  }, [])
+  }, [init])
 
   return (
     <>
@@ -113,12 +114,7 @@ const Page = () => {
               Contact <span>family</span>. Chat with <span>friends</span>. All
               with one click.
             </p>
-            <button
-              className={styles.btn}
-              onClick={() => router.push("/signup")}
-            >
-              Sign Up
-            </button>
+            <Button href="/signup">Sign Up</Button>
           </div>
         </div>
         <div className={styles.topRight}>
