@@ -1,5 +1,4 @@
 import { FaPlus, FaUser } from "react-icons/fa"
-import { useCallback, useEffect, useState } from "react"
 import styles from "./chats.module.css"
 import Link from "next/link"
 
@@ -34,66 +33,54 @@ const TimeSinceUpdate = ({ date }) => {
   }
 
   // Setting to the formatted time
-  const [formattedTime, setFormattedTime] = useState(formatChatTime(date))
+  const formattedTime = formatChatTime(date)
+  //// const [formattedTime, setFormattedTime] = useState(formatChatTime(date))
 
-  // UseEffect to refresh the formatted time every minute
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setFormattedTime(formatChatTime(date))
-    }, 60000)
+  // TODO Refresh the formatted time every minute
+  //// useEffect(() => {
+  ////   const interval = setInterval(() => {
+  ////     setFormattedTime(formatChatTime(date))
+  ////   }, 60000)
 
-    return () => clearInterval(interval)
-  }, [date])
+  ////   return () => clearInterval(interval)
+  //// }, [date])
 
-  // UseEffect to set formatted time on direct update
-  useEffect(() => {
-    setFormattedTime(formatChatTime(date))
-  }, [date])
+  // TODO Refresh formatted time on direct update
+  //// useEffect(() => {
+  ////   setFormattedTime(formatChatTime(date))
+  //// }, [date])
 
   // Returns the formatted time
   return <p className={styles.chatTime}>{formattedTime}</p>
 }
 
 // * Individual chat component
-const Chat = ({ chat, setChatId, publicChatId, supabase }) => {
-  const [latestMessage, setLatestMessage] = useState("")
+const Chat = async ({ chat, chatId, supabase }) => {
   const date = new Date(chat.last_update)
 
-  // UseEffect to get the latest message sent in current chat
-  useEffect(() => {
-    const getLatestMessage = async () => {
-      const { data } = await supabase
-        .from("messages")
-        .select("*, profile: profiles(*)")
-        .eq("chat_id", chat.id)
-        .order("created_at", { ascending: false })
-        .limit(1)
-
-      setLatestMessage(data[0])
-    }
-
-    getLatestMessage()
-  }, [chat, supabase])
+  // Getting the latest message sent in current chat
+  const { data: latestMessage } = await supabase
+    .from("messages")
+    .select("*, profile: profiles(*)")
+    .eq("chat_id", chat.id)
+    .order("created_at", { ascending: false })
+    .limit(1)
 
   // Check if the current chat is selected
-  const isSelected = publicChatId === chat.public_id
-
-  // If it is, set the chat id variable to the chat id
-  if (isSelected) setChatId(chat.id)
+  const isSelected = chatId === chat.id
 
   // Render the chat component
   return (
     <Link
       className={`${styles.chat} ${isSelected && styles.chatSelected}`}
-      href={`/c/${chat.public_id}`}
+      href={`/c/${chat.id}`}
     >
       {/* Left side of chat component */}
       <div className={styles.chatLeft}>
         <p className={styles.chatName}>{chat.name}</p>
         <p className={styles.chatLatestMessage}>
           {/* Display chat message */}
-          {latestMessage.profile &&
-            `${latestMessage.profile.username}: ${latestMessage.text}`}
+          {latestMessage[0].profile.username}: {latestMessage[0].text}
         </p>
       </div>
       {/* Formatted time */}
@@ -103,81 +90,54 @@ const Chat = ({ chat, setChatId, publicChatId, supabase }) => {
 }
 
 // * Component to display list of chats
-const Chats = ({ chatId, setChatId, publicChatId, supabase, username }) => {
-  const [chats, setChats] = useState([])
+const Chats = async ({ chatId, supabase, user, profile }) => {
+  // TODO Channel listening to updates on the chats table
+  //// const channel = supabase
+  //// .channel("chat-changes")
+  //// .on(
+  //// "postgres_changes",
+  //// {
+  //// event: "UPDATE",
+  //// schema: "public",
+  //// table: "chats",
+  //// },
+  //// (payload) => {
+  // ? First setting the current chats
+  //// const updatedChats = [...chats]
 
-  // UseEffect to listen to updates on the chats table
-  useEffect(() => {
-    const channel = supabase
-      .channel("chat-changes")
-      .on(
-        "postgres_changes",
-        {
-          event: "UPDATE",
-          schema: "public",
-          table: "chats",
-        },
-        (payload) => {
-          // First setting the current chats
-          const updatedChats = [...chats]
+  // ? Finding which index is the updated chat
+  //// const index = updatedChats.findIndex(
+  //// (chat) => chat.id === payload.new.id
+  //// )
 
-          // Finding which index is the updated chat
-          const index = updatedChats.findIndex(
-            (chat) => chat.id === payload.new.id
-          )
+  // ? Making sure that the chat exists
+  //// if (index !== -1) {
+  // ? Setting the old chat to the new chat
+  //// updatedChats[index] = payload.new
 
-          // Making sure that the chat exists
-          if (index !== -1) {
-            // Setting the old chat to the new chat
-            updatedChats[index] = payload.new
+  // ? Sorting the chats by latest update
+  //// updatedChats.sort(
+  //// (a, b) => new Date(b.last_update) - new Date(a.last_update)
+  //// )
 
-            // Sorting the chats by latest update
-            updatedChats.sort(
-              (a, b) => new Date(b.last_update) - new Date(a.last_update)
-            )
+  // ? Finally setting the chats
+  //// setChats(updatedChats)
+  //// }
+  //// }
+  //// )
+  //// .subscribe()
 
-            // Finally setting the chats
-            setChats(updatedChats)
-          }
-        }
-      )
-      .subscribe()
+  ////   return () => {
+  ////     supabase.removeChannel(channel)
+  ////   }
 
-    return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [supabase, chats, setChats])
+  // TODO Function for creating new chats
 
-  // Function for creating new chats
-  const createChat = async (name) => {
-    await supabase.from("chats").insert([
-      {
-        name,
-      },
-    ])
-  }
-
-  // Function to get list of chats
-  const getChats = useCallback(async () => {
-    try {
-      const { data, error } = await supabase
-        .from("chats")
-        .select("*")
-        .order("last_update", { ascending: false })
-
-      if (error) throw error
-      // Throwing the error will stop the code from continuing
-
-      setChats(data)
-    } catch (error) {
-      console.error("Error fetching chats:", error.message)
-    }
-  }, [supabase])
-
-  // Getting chats on initial page load
-  useEffect(() => {
-    getChats()
-  }, [getChats])
+  // Getting list of chats on render
+  const { data: chats } = await supabase
+    .from("chats")
+    .select("*")
+    .order("last_update", { ascending: false })
 
   return (
     <>
@@ -185,9 +145,7 @@ const Chats = ({ chatId, setChatId, publicChatId, supabase, username }) => {
         <div className={styles.top}>
           <div className={styles.header}>
             <h1>Messages</h1>
-            <button onClick={createChat}>
-              <FaPlus className={styles.icon} />
-            </button>
+            <FaPlus className={styles.icon} />
           </div>
           <div className={styles.chats}>
             {chats
@@ -195,8 +153,7 @@ const Chats = ({ chatId, setChatId, publicChatId, supabase, username }) => {
                   return (
                     <Chat
                       chat={chat}
-                      setChatId={setChatId}
-                      publicChatId={publicChatId}
+                      chatId={chatId}
                       supabase={supabase}
                       key={chat.id}
                     />
@@ -216,7 +173,7 @@ const Chats = ({ chatId, setChatId, publicChatId, supabase, username }) => {
                 <FaUser className={styles.icon} />
               </button>
             </form>
-            <h2 className={styles.username}>{username}</h2>
+            <h2 className={styles.username}>{profile.username}</h2>
           </div>
         </div>
       </div>

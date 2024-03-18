@@ -26,5 +26,6 @@ a chat app
 - **Code Clean-Up:** Refactor and clean up the codebase for components and pages to improve maintainability and readability (includes error)
 - **Public Chat ID System:** Public chat IDs will throw error on the rare occurance that they are created the same
 - **Client vs Server:** Make data fetched on server for efficiency
+- **Chat Pages:** Chat pages reload the whole page instead of just data on change
 
 Feel free to reach out, suggest improvements, or report any issues you encounter.

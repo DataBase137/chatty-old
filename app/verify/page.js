@@ -1,7 +1,7 @@
 import styles from "./page.module.css"
 
 const Page = () => {
-  // TODO: Add button for resend and build out styles
+  // TODO Add button for resend and build out styles
 
   return (
     <>
